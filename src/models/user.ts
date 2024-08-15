@@ -8,7 +8,6 @@ export const userSchema = z.object({
   active: z.boolean(),
   mfaEnabled: z.boolean(),
   mfaVerified: z.boolean(),
-  mfaSecret: z.string().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

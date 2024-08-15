@@ -16,15 +16,15 @@ export default async function requestMiddlewareLogger(
 
   const endTime = Date.now();
 
-  const typeText = `${chalk.magenta(type)}`;
+  const typeText = `${chalk.blueBright(type)}`;
 
   const pathText = `${chalk.white(path)}`;
 
   const finishedInText = `${chalk.gray("Finished in:")}`;
 
-  const timeDifferenceText = `${chalk.magenta(`${endTime - startTime}ms`)}`;
+  const timeDifferenceText = `${chalk.blueBright(`${endTime - startTime}ms`)}`;
 
-  const statusText = `${chalk.gray("Status:")} ${chalk.magenta(
+  const statusText = `${chalk.gray("Status:")} ${chalk.blueBright(
     context.res.status
   )}`;
 

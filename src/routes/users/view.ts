@@ -9,14 +9,14 @@ import { userSchema } from "../../models/user";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 
-const usersRouter = new Hono();
+const viewUsersRouter = new Hono();
 
 const querySchema = z.object({
   role: z.enum(roles.enumValues).optional(),
   id: z.string().uuid().optional(),
 });
 
-usersRouter.get(
+viewUsersRouter.get(
   "/",
   async (context, next) =>
     await authMiddleware(
@@ -113,3 +113,5 @@ const handleUsersForRole = async (role: UserRoles, context: Context) => {
     200
   );
 };
+
+export default viewUsersRouter;

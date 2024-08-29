@@ -94,5 +94,7 @@ if (!adminFound) {
     role: "System Admin",
   });
 
-  console.log("✅ Created admin user: " + adminEmail);
+  console.log(
+    "✅ Created admin user " + adminEmail + " with password " + adminPassword
+  );
 }

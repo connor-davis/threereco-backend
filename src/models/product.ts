@@ -29,6 +29,7 @@ export const updateProductSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   price: z.number().optional(),
+  businessId: z.string().uuid(),
 });
 
 export type UpdateCollector = z.infer<typeof updateProductSchema>;

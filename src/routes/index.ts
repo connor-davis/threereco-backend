@@ -1,10 +1,12 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import authentication from "./authentication";
-import users from "./users";
+import authenticationRouter from "./authentication";
+import usersRouter from "./users";
+import businessesRouter from "./businesses";
 
 const router = new OpenAPIHono();
 
-router.route("/authentication", authentication);
-router.route("/users", users);
+router.route("/authentication", authenticationRouter);
+router.route("/users", usersRouter);
+router.route("/businesses", businessesRouter);
 
 export default router;

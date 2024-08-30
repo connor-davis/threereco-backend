@@ -30,6 +30,9 @@ export const createCollectorSchema = z.object({
   city: z.string(),
   province: z.string(),
   zipCode: z.string(),
+  bankName: z.string(),
+  bankAccountHolder: z.string(),
+  bankAccountNumber: z.string(),
   userId: z.string().uuid(),
 });
 

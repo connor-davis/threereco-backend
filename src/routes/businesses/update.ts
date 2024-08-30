@@ -44,7 +44,7 @@ updateBusinessRouter.put(
       }
     }
 
-    await db.update(businesses).set(business);
+    await db.update(businesses).set(business).where(eq(businesses.id, id));
 
     return context.json({ ...business }, 200);
   }

@@ -40,9 +40,7 @@ const handleUsers = async (context: Context) => {
   const usersResult = await db.select().from(users);
 
   return context.json(
-    {
-      data: usersResult.map((user) => userSchema.parse(user)),
-    },
+    [...usersResult.map((user) => userSchema.parse(user))],
     200
   );
 };
@@ -67,7 +65,7 @@ const handleUser = async (id: string, context: Context) => {
 
   return context.json(
     {
-      data: userSchema.parse(userFound),
+      ...userSchema.parse(userFound),
     },
     200
   );
@@ -97,7 +95,7 @@ const handleUserWithRole = async (
 
   return context.json(
     {
-      data: userSchema.parse(userFound),
+      ...userSchema.parse(userFound),
     },
     200
   );
@@ -107,9 +105,7 @@ const handleUsersForRole = async (role: UserRoles, context: Context) => {
   const usersResult = await db.select().from(users).where(eq(users.role, role));
 
   return context.json(
-    {
-      data: usersResult.map((user) => userSchema.parse(user)),
-    },
+    [...usersResult.map((user) => userSchema.parse(user))],
     200
   );
 };

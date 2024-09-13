@@ -11,10 +11,16 @@ export const collectorSchema = z.object({
   city: z.string(),
   province: z.string(),
   zipCode: z.string(),
+  bankName: z.string(),
+  bankAccountHolder: z.string(),
+  bankAccountNumber: z.string(),
   userId: z.string().uuid(),
-  user: z.object({
-    ...userSchema.shape,
-  }),
+  user: z
+    .object({
+      ...userSchema.shape,
+    })
+    .nullable()
+    .optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

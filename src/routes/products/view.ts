@@ -5,6 +5,7 @@ import { zValidator } from "@hono/zod-validator";
 import db from "../../db";
 import { products } from "../../schemas";
 import { eq } from "drizzle-orm";
+import { productSchema } from "../../models/product";
 
 const viewProductsRouter = new Hono();
 
@@ -32,9 +33,23 @@ viewProductsRouter.get(
       const productResult = await db
         .select()
         .from(products)
-        .where(eq(products.id, id));
+        .where(eq(products.id, id))
+        .limit(1);
+      const productFound = productResult[0];
 
-      return context.json({ ...productResult }, 200);
+      if (!productFound) {
+        return context.json(
+          { error: "Not Found", reason: "Product not found." },
+          404
+        );
+      }
+
+      return context.json(
+        {
+          ...productSchema.parse({ ...productFound, business: null }),
+        },
+        200
+      );
     }
   }
 );

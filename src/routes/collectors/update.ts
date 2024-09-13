@@ -29,25 +29,6 @@ updateCollectorRouter.put(
       await context.req.json()
     );
 
-    if (collector.idNumber) {
-      const result = await db
-        .select()
-        .from(collectors)
-        .where(eq(collectors.idNumber, collector.idNumber))
-        .limit(1);
-      const collectorFound = result[0];
-
-      if (collectorFound) {
-        return context.json(
-          {
-            error: "Bad Request",
-            reason: "Collector already exists with that ID number.",
-          },
-          400
-        );
-      }
-    }
-
     await db.update(collectors).set(collector).where(eq(collectors.id, id));
 
     return context.json({ ...collector }, 200);

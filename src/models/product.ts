@@ -6,10 +6,15 @@ export const productSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
+  gwCode: z.number(),
+  carbonFactor: z.number(),
   businessId: z.string().uuid(),
-  business: z.object({
-    ...businessSchema.shape,
-  }),
+  business: z
+    .object({
+      ...businessSchema.shape,
+    })
+    .nullable()
+    .optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -20,6 +25,8 @@ export const createProductSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
+  gwCode: z.number(),
+  carbonFactor: z.number(),
   businessId: z.string().uuid(),
 });
 
@@ -29,6 +36,8 @@ export const updateProductSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   price: z.number().optional(),
+  gwCode: z.number().optional(),
+  carbonFactor: z.number().optional(),
   businessId: z.string().uuid(),
 });
 

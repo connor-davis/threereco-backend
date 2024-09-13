@@ -2,7 +2,7 @@ import { genSalt, hash } from "bcrypt";
 
 import { Hono } from "hono";
 import authMiddleware from "../../utilities/authMiddleware";
-import { createUserSchema } from "../../models/user";
+import { createUserSchema, userSchema } from "../../models/user";
 import db from "../../db";
 import { eq } from "drizzle-orm";
 import { users } from "../../schemas";
@@ -40,14 +40,14 @@ createUserRouter.post(
     const passwordSalt = await genSalt(2048);
     const hashedPassword = await hash(password, passwordSalt);
 
-    await db
+    const returnedUser = await db
       .insert(users)
       .values({ email, password: hashedPassword, role })
       .returning();
 
-    return context.json({
-      success: true,
-    });
+    const user = await userSchema.parseAsync(returnedUser[0]);
+
+    return context.json({ ...user });
   }
 );
 

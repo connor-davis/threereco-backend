@@ -29,30 +29,6 @@ updateProductRouter.put(
       await context.req.json()
     );
 
-    if (product.name) {
-      const result = await db
-        .select()
-        .from(products)
-        .where(
-          and(
-            eq(products.name, product.name),
-            eq(products.businessId, product.businessId)
-          )
-        )
-        .limit(1);
-      const productFound = result[0];
-
-      if (productFound) {
-        return context.json(
-          {
-            error: "Bad Request",
-            reason: "Product already exists with that name for the business.",
-          },
-          400
-        );
-      }
-    }
-
     await db.update(products).set(product).where(eq(products.id, id));
 
     return context.json({ ...product }, 200);

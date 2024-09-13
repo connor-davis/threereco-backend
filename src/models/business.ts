@@ -13,9 +13,12 @@ export const businessSchema = z.object({
   province: z.string(),
   zipCode: z.string(),
   userId: z.string().uuid(),
-  user: z.object({
-    ...userSchema.shape,
-  }),
+  user: z
+    .object({
+      ...userSchema.shape,
+    })
+    .nullable()
+    .optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

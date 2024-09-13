@@ -20,6 +20,16 @@ import {
   userCollectors as userCollectorsSchema,
 } from "./collectors";
 
+import {
+  collections as collectionsSchema,
+  collectionsBusiness as collectionsBusinessesSchema,
+  collectionsCollector as collectionsCollectorsSchema,
+  collectionsProduct as collectionsProductsSchema,
+  businessCollections as businessCollectionsSchema,
+  collectorCollections as collectorCollectionsSchema,
+  productCollections as productCollectionsSchema,
+} from "./collections";
+
 import { businessTypes as businessTypesSchema } from "./businessTypes";
 import { roles as rolesSchema } from "./roles";
 import { users as usersSchema } from "./users";
@@ -35,6 +45,14 @@ export const userBusinesses = userBusinessesSchema;
 export const collectors = collectorsSchema;
 export const collectorsUsers = collectorsUsersSchema;
 export const userCollectors = userCollectorsSchema;
+
+export const collections = collectionsSchema;
+export const collectionsBusiness = collectionsBusinessesSchema;
+export const collectionsCollector = collectionsCollectorsSchema;
+export const collectionsProduct = collectionsProductsSchema;
+export const businessCollections = businessCollectionsSchema;
+export const collectorCollections = collectorCollectionsSchema;
+export const productCollections = productCollectionsSchema;
 
 export const products = productsSchema;
 export const productsBusinesses = productsBusinessesSchema;

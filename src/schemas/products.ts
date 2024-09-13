@@ -2,7 +2,6 @@ import {
   customType,
   decimal,
   numeric,
-  PgDoublePrecisionBuilderInitial,
   pgTable,
   text,
   uuid,
@@ -10,6 +9,9 @@ import {
 import { relations, sql } from "drizzle-orm";
 
 import { businesses } from "./businesses";
+import { decimalInt, decimalNumber } from "../utilities/postgres";
+
+
 
 export const products = pgTable("products", {
   id: uuid("id")
@@ -17,10 +19,9 @@ export const products = pgTable("products", {
     .default(sql`uuid_generate_v4()`),
   name: text("name").notNull(),
   description: text("description").notNull(),
-  price: decimal("price", {
-    precision: 7,
-    scale: 4,
-  }).notNull() as unknown as PgDoublePrecisionBuilderInitial<"price">,
+  price: decimalNumber("price").notNull(),
+  gwCode: decimalInt("gwCode").notNull(),
+  carbonFactor: decimalInt("carbonFactor").notNull(),
   businessId: uuid("business_id").notNull(),
   createdAt: text("created_at")
     .default(sql`CURRENT_TIMESTAMP`)

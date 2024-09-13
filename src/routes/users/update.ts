@@ -13,21 +13,23 @@ const querySchema = z.object({
   id: z.string().uuid(),
 });
 
-updateUserRouter.delete(
+updateUserRouter.put(
   "/",
   async (context, next) =>
-    await authMiddleware(["System Admin", "Admin", "Staff"], context, next),
+    await authMiddleware(
+      ["System Admin", "Admin", "Staff", "Business"],
+      context,
+      next
+    ),
   zValidator("query", querySchema),
   zValidator("json", updateUserSchema),
   async (context) => {
     const { id } = await querySchema.parseAsync(context.req.query());
-    const updateUser = await updateUserSchema.parseAsync(
-      await context.req.json()
-    );
+    const user = await updateUserSchema.parseAsync(await context.req.json());
 
-    await db.update(users).set(updateUser).where(eq(users.id, id));
+    await db.update(users).set(user).where(eq(users.id, id));
 
-    return context.text("ok", 200);
+    return context.json({ ...user }, 200);
   }
 );
 

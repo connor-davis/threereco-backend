@@ -4,10 +4,9 @@ import { z } from "zod";
 export const productSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  description: z.string(),
   price: z.number(),
-  gwCode: z.number(),
-  carbonFactor: z.number(),
+  gwCode: z.string(),
+  carbonFactor: z.string(),
   businessId: z.string().uuid(),
   business: z
     .object({
@@ -23,10 +22,9 @@ export type Collector = z.infer<typeof productSchema>;
 
 export const createProductSchema = z.object({
   name: z.string(),
-  description: z.string(),
   price: z.number(),
-  gwCode: z.number(),
-  carbonFactor: z.number(),
+  gwCode: z.string(),
+  carbonFactor: z.string(),
   businessId: z.string().uuid(),
 });
 
@@ -34,10 +32,9 @@ export type CreateCollector = z.infer<typeof createProductSchema>;
 
 export const updateProductSchema = z.object({
   name: z.string().optional(),
-  description: z.string().optional(),
   price: z.number().optional(),
-  gwCode: z.number().optional(),
-  carbonFactor: z.number().optional(),
+  gwCode: z.string().optional(),
+  carbonFactor: z.string().optional(),
   businessId: z.string().uuid(),
 });
 

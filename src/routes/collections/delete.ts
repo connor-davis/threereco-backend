@@ -16,7 +16,7 @@ deleteCollectionRouter.delete(
   "/",
   async (context, next) =>
     await authMiddleware(
-      ["System Admin", "Admin", "Staff", "Business"],
+      ["System Admin", "Admin"],
       context,
       next
     ),

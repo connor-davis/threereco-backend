@@ -1,6 +1,7 @@
-import { decimal, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
+import { decimalNumber } from "../utilities/postgres";
 import { businesses } from "./businesses";
 
 export const transactions = pgTable("transactions", {
@@ -10,7 +11,7 @@ export const transactions = pgTable("transactions", {
   buyerId: uuid("buyer_id").notNull(),
   sellerId: uuid("seller_id").notNull(),
   productId: uuid("product_id").notNull(),
-  weight: decimal("weight").notNull(),
+  weight: decimalNumber("weight").notNull(),
   createdAt: text("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -27,7 +28,7 @@ export const transactionsBuyer = relations(transactions, ({ one }) => ({
 }));
 
 export const transactionsSeller = relations(transactions, ({ one }) => ({
-  buyer: one(businesses, {
+  seller: one(businesses, {
     fields: [transactions.buyerId],
     references: [businesses.id],
   }),

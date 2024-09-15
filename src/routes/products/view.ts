@@ -3,7 +3,7 @@ import { z } from "zod";
 import authMiddleware from "../../utilities/authMiddleware";
 import { zValidator } from "@hono/zod-validator";
 import db from "../../db";
-import { products } from "../../schemas";
+import { businesses, products } from "../../schemas";
 import { and, eq, or } from "drizzle-orm";
 import { productSchema } from "../../models/product";
 import { Session } from "hono-sessions";
@@ -35,39 +35,71 @@ viewProductsRouter.get(
     const userRole = session.get("user_role") as string;
     const isBusinessUser = userRole === "Business";
 
-    if (!id) {
-      const productsResult = await db
+    if (isBusinessUser) {
+      const businessResults = await db
         .select()
-        .from(products)
-        .where(isBusinessUser ? eq(products.businessId, userId) : undefined);
-
-      return context.json([...productsResult], 200);
-    } else {
-      const productResult = await db
-        .select()
-        .from(products)
-        .where(
-          or(
-            eq(products.id, id),
-            isBusinessUser ? eq(products.businessId, userId) : undefined
-          )
-        )
+        .from(businesses)
+        .where(eq(businesses.userId, userId))
         .limit(1);
-      const productFound = productResult[0];
+      const business = businessResults[0];
+      const businessId = business.id;
 
-      if (!productFound) {
+      if (!id) {
+        const productsResult = await db
+          .select()
+          .from(products)
+          .where(eq(products.businessId, businessId));
+
+        return context.json([...productsResult], 200);
+      } else {
+        const productResult = await db
+          .select()
+          .from(products)
+          .where(and(eq(products.id, id), eq(products.businessId, businessId)))
+          .limit(1);
+        const productFound = productResult[0];
+
+        if (!productFound) {
+          return context.json(
+            { error: "Not Found", reason: "Product not found." },
+            404
+          );
+        }
+
         return context.json(
-          { error: "Not Found", reason: "Product not found." },
-          404
+          {
+            ...productSchema.parse({ ...productFound, business: null }),
+          },
+          200
         );
       }
+    } else {
+      if (!id) {
+        const productsResult = await db.select().from(products);
 
-      return context.json(
-        {
-          ...productSchema.parse({ ...productFound, business: null }),
-        },
-        200
-      );
+        return context.json([...productsResult], 200);
+      } else {
+        const productResult = await db
+          .select()
+          .from(products)
+          .where(eq(products.id, id))
+          .limit(1);
+        const productFound = productResult[0];
+
+        if (!productFound) {
+          return context.json(
+            { error: "Not Found", reason: "Product not found." },
+            404
+          );
+        }
+
+        return context.json(
+          {
+            ...productSchema.parse({ ...productFound, business: null }),
+          },
+          200
+        );
+      }
     }
   }
 );

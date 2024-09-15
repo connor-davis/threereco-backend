@@ -4,7 +4,7 @@ import authMiddleware from "../../utilities/authMiddleware";
 import { zValidator } from "@hono/zod-validator";
 import db from "../../db";
 import { products } from "../../schemas";
-import { and, eq } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { productSchema } from "../../models/product";
 import { Session } from "hono-sessions";
 
@@ -39,19 +39,14 @@ viewProductsRouter.get(
       const productsResult = await db
         .select()
         .from(products)
-        .where(isBusinessUser ? eq(products.businessId, userId) : undefined);
+        .where(or(eq(products.businessId, userId)));
 
       return context.json([...productsResult], 200);
     } else {
       const productResult = await db
         .select()
         .from(products)
-        .where(
-          and(
-            eq(products.id, id),
-            isBusinessUser ? eq(products.businessId, userId) : undefined
-          )
-        )
+        .where(or(eq(products.id, id), eq(products.businessId, userId)))
         .limit(1);
       const productFound = productResult[0];
 

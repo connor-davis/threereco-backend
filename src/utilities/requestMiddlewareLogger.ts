@@ -11,6 +11,9 @@ export default async function requestMiddlewareLogger(
   const startTime = Date.now();
   const type = context.req.method;
   const path = context.req.path;
+  const query = Object.keys(context.req.query())
+    .map((key) => `${key}=${context.req.query()[key]}`)
+    .join("&");
 
   await next();
 
@@ -19,6 +22,7 @@ export default async function requestMiddlewareLogger(
   const typeText = `${chalk.blueBright(type)}`;
 
   const pathText = `${chalk.white(path)}`;
+  const queryText = `${chalk.white(query)}`;
 
   const finishedInText = `${chalk.gray("Finished in:")}`;
 
@@ -28,7 +32,9 @@ export default async function requestMiddlewareLogger(
     context.res.status
   )}`;
 
-  const loggerMessage = `${typeText} ${pathText} ${finishedInText} ${timeDifferenceText} ${statusText}`;
+  const loggerMessage = `${typeText} ${pathText}${
+    queryText.length > 0 ? `?${queryText}` : ""
+  } ${finishedInText} ${timeDifferenceText} ${statusText}`;
 
   logger.info(loggerMessage);
 }

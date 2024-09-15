@@ -39,14 +39,19 @@ viewProductsRouter.get(
       const productsResult = await db
         .select()
         .from(products)
-        .where(or(eq(products.businessId, userId)));
+        .where(isBusinessUser ? eq(products.businessId, userId) : undefined);
 
       return context.json([...productsResult], 200);
     } else {
       const productResult = await db
         .select()
         .from(products)
-        .where(or(eq(products.id, id), eq(products.businessId, userId)))
+        .where(
+          or(
+            eq(products.id, id),
+            isBusinessUser ? eq(products.businessId, userId) : undefined
+          )
+        )
         .limit(1);
       const productFound = productResult[0];
 

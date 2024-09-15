@@ -60,6 +60,7 @@ loginRouter.post("/", async (context) => {
 
     session.set("user_id", userFound.id);
     session.set("user_email", userFound.email);
+    session.set("user_role", userFound.role);
 
     return context.json({ data: userSchema.parse(userFound) }, 200);
   } else {

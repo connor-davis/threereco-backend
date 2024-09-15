@@ -4,10 +4,16 @@ import authMiddleware from "../../utilities/authMiddleware";
 import { zValidator } from "@hono/zod-validator";
 import db from "../../db";
 import { products } from "../../schemas";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { productSchema } from "../../models/product";
+import { Session } from "hono-sessions";
 
-const viewProductsRouter = new Hono();
+const viewProductsRouter = new Hono<{
+  Variables: {
+    session: Session;
+    session_key_rotation: boolean;
+  };
+}>();
 
 const QuerySchema = z.object({
   id: z.string().uuid().nullable().optional(),
@@ -24,16 +30,28 @@ viewProductsRouter.get(
   zValidator("query", QuerySchema),
   async (context) => {
     const { id } = await QuerySchema.parseAsync(context.req.query());
+    const session = context.get("session");
+    const userId = session.get("user_id") as string;
+    const userRole = session.get("user_role") as string;
+    const isBusinessUser = userRole === "Business";
 
     if (!id) {
-      const productsResult = await db.select().from(products);
+      const productsResult = await db
+        .select()
+        .from(products)
+        .where(isBusinessUser ? eq(products.businessId, userId) : undefined);
 
       return context.json([...productsResult], 200);
     } else {
       const productResult = await db
         .select()
         .from(products)
-        .where(eq(products.id, id))
+        .where(
+          and(
+            eq(products.id, id),
+            isBusinessUser ? eq(products.businessId, userId) : undefined
+          )
+        )
         .limit(1);
       const productFound = productResult[0];
 

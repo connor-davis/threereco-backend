@@ -37,7 +37,7 @@ checkRouter.get(
       );
     }
 
-    return context.json(userFound, 200);
+    return context.json({ ...userFound }, 200);
   }
 );
 

@@ -8,8 +8,8 @@ export const transactionSchema = z.object({
     ...collectionSchema.shape,
   }),
   weight: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;

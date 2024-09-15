@@ -1,7 +1,7 @@
-import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import { roles } from "./roles";
 import { sql } from "drizzle-orm";
+import { roles } from "./roles";
 
 export const users = pgTable("users", {
   id: uuid("id")
@@ -15,10 +15,10 @@ export const users = pgTable("users", {
   mfaEnabled: boolean("mfa_enabled").default(false).notNull(),
   mfaVerified: boolean("mfa_verified").default(false).notNull(),
   mfaSecret: text("mfa_secret"),
-  createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
-  updatedAt: text("updated_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
 });

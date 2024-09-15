@@ -8,8 +8,8 @@ export const userSchema = z.object({
   active: z.boolean(),
   mfaEnabled: z.boolean(),
   mfaVerified: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export type User = z.infer<typeof userSchema>;

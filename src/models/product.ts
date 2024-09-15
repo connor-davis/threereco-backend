@@ -14,8 +14,8 @@ export const productSchema = z.object({
     })
     .nullable()
     .optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export type Collector = z.infer<typeof productSchema>;

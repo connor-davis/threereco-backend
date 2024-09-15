@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { decimalNumber } from "../utilities/postgres";
 import { businesses } from "./businesses";
@@ -12,11 +12,11 @@ export const transactions = pgTable("transactions", {
   sellerId: uuid("seller_id").notNull(),
   productId: uuid("product_id").notNull(),
   weight: decimalNumber("weight").notNull(),
-  createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
-  updatedAt: text("updated_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
 });
 

@@ -18,8 +18,8 @@ export const collectionSchema = z.object({
     ...productSchema.shape,
   }),
   weight: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export type Collection = z.infer<typeof collectionSchema>;

@@ -1,15 +1,8 @@
-import {
-  customType,
-  decimal,
-  numeric,
-  pgTable,
-  text,
-  uuid,
-} from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
+import { decimalNumber } from "../utilities/postgres";
 import { businesses } from "./businesses";
-import { decimalInt, decimalNumber } from "../utilities/postgres";
 
 export const products = pgTable("products", {
   id: uuid("id")
@@ -20,11 +13,11 @@ export const products = pgTable("products", {
   gwCode: text("gwCode").notNull(),
   carbonFactor: text("carbonFactor").notNull(),
   businessId: uuid("business_id").notNull(),
-  createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
-  updatedAt: text("updated_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
 });
 

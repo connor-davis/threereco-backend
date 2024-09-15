@@ -1,5 +1,5 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { businessTypes } from "./businessTypes";
 import { users } from "./users";
@@ -17,11 +17,11 @@ export const businesses = pgTable("businesses", {
   province: text("province"),
   zipCode: text("zip_code"),
   userId: uuid("user_id").notNull(),
-  createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
-  updatedAt: text("updated_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+    .defaultNow()
     .notNull(),
 });
 

@@ -29,7 +29,10 @@ updateProductRouter.put(
       await context.req.json()
     );
 
-    await db.update(products).set(product).where(eq(products.id, id));
+    await db
+      .update(products)
+      .set({ ...product, updatedAt: new Date() })
+      .where(eq(products.id, id));
 
     return context.json({ ...product }, 200);
   }

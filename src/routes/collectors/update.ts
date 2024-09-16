@@ -29,7 +29,10 @@ updateCollectorRouter.put(
       await context.req.json()
     );
 
-    await db.update(collectors).set(collector).where(eq(collectors.id, id));
+    await db
+      .update(collectors)
+      .set({ ...collector, updatedAt: new Date() })
+      .where(eq(collectors.id, id));
 
     return context.json({ ...collector }, 200);
   }

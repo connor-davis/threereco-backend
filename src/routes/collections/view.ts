@@ -1,13 +1,19 @@
 import { zValidator } from "@hono/zod-validator";
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { QueryBuilder } from "drizzle-orm/pg-core";
 import { Hono } from "hono";
 import { z } from "zod";
 import db from "../../db";
 import { businesses, collections, collectors, products } from "../../schemas";
 import authMiddleware from "../../utilities/authMiddleware";
+import { Session } from "hono-sessions";
 
-const viewCollectionsRouter = new Hono();
+const viewCollectionsRouter = new Hono<{
+  Variables: {
+    session: Session;
+    session_key_rotation: boolean;
+  };
+}>();
 
 const QuerySchema = z.object({
   id: z.string().uuid().nullable().optional(),
@@ -29,13 +35,23 @@ viewCollectionsRouter.get(
     const { id, includeBusiness, includeCollector, includeProduct } =
       await QuerySchema.parseAsync(context.req.query());
 
+    const session = context.get("session");
+    const userId = session.get("user_id") as string;
+    const userRole = session.get("user_role") as string;
+    const isBusinessUser = userRole === "Business";
+
     const results = await db
       .select()
       .from(collections)
       .leftJoin(businesses, eq(collections.businessId, businesses.id))
       .leftJoin(collectors, eq(collections.collectorId, collectors.id))
       .leftJoin(products, eq(collections.productId, products.id))
-      .where(or(id ? eq(collections.id, id) : undefined));
+      .where(
+        and(
+          id ? eq(collections.id, id) : undefined,
+          isBusinessUser ? eq(businesses.userId, userId) : undefined
+        )
+      );
 
     if (id)
       return context.json(

@@ -29,6 +29,8 @@ export const createCollectionSchema = z.object({
   collectorId: z.string().uuid(),
   productId: z.string().uuid(),
   weight: z.number(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 
 export type CreateCollection = z.infer<typeof createCollectionSchema>;
@@ -38,6 +40,8 @@ export const updateCollectionSchema = z.object({
   collectorId: z.string().uuid().optional(),
   productId: z.string().uuid().optional(),
   weight: z.number().optional(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 
 export type UpdateCollection = z.infer<typeof updateCollectionSchema>;

@@ -27,7 +27,10 @@ updateUserRouter.put(
     const { id } = await querySchema.parseAsync(context.req.query());
     const user = await updateUserSchema.parseAsync(await context.req.json());
 
-    await db.update(users).set(user).where(eq(users.id, id));
+    await db
+      .update(users)
+      .set({ ...user, updatedAt: new Date() })
+      .where(eq(users.id, id));
 
     return context.json({ ...user }, 200);
   }

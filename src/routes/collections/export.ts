@@ -12,6 +12,7 @@ import {
 } from "../../schemas";
 import { flattenObject } from "../../utilities";
 import authMiddleware from "../../utilities/authMiddleware";
+import { format } from "date-fns";
 
 const exportCollectionsRouter = new Hono();
 
@@ -49,7 +50,7 @@ exportCollectionsRouter.get(
       );
 
     let csvString =
-      '"Business Name","Business Type","Business Description","Business Phone Number","Business Address","Business City","Business Province","Business Zip Code","Business Email","Collector First Name","Collector Last Name","Collector ID Number","Collector Phone Number","Collector Address","Collector City","Collector Province","Collector Zip Code","Collector Bank Name","Collector Bank Account Holder","Collector Bank Account Number","Collector Email","Product Name","Product GW Code","Product tCO2/ton Factor","Product Price","Collection Weight"\n';
+      '"Business Name","Business Type","Business Description","Business Phone Number","Business Address","Business City","Business Province","Business Zip Code","Business Email","Collector First Name","Collector Last Name","Collector ID Number","Collector Phone Number","Collector Address","Collector City","Collector Province","Collector Zip Code","Collector Bank Name","Collector Bank Account Holder","Collector Bank Account Number","Collector Email","Product Name","Product GW Code","Product tCO2/ton Factor","Product Price","Collection Weight","Collection Date"\n';
 
     for (const result of results) {
       if (!result.businesses) continue;
@@ -74,7 +75,7 @@ exportCollectionsRouter.get(
         result.products.gwCode
       }","${result.products.carbonFactor}","${result.products.price}","${
         result.collections.weight
-      }"\n`;
+      }","${format(result.collections.createdAt, "PPP")}"\n`;
     }
 
     return context.text(csvString, 200);

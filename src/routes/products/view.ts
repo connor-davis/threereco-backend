@@ -17,6 +17,7 @@ const viewProductsRouter = new Hono<{
 
 const QuerySchema = z.object({
   id: z.string().uuid().nullable().optional(),
+  includeBusiness: z.coerce.boolean().optional(),
 });
 
 viewProductsRouter.get(
@@ -29,77 +30,60 @@ viewProductsRouter.get(
     ),
   zValidator("query", QuerySchema),
   async (context) => {
-    const { id } = await QuerySchema.parseAsync(context.req.query());
+    const { id, includeBusiness } = await QuerySchema.parseAsync(
+      context.req.query()
+    );
     const session = context.get("session");
     const userId = session.get("user_id") as string;
     const userRole = session.get("user_role") as string;
     const isBusinessUser = userRole === "Business";
 
-    if (isBusinessUser) {
-      const businessResults = await db
+    if (!id) {
+      const productsResult = await db
         .select()
-        .from(businesses)
-        .where(eq(businesses.userId, userId))
-        .limit(1);
-      const business = businessResults[0];
-      const businessId = business.id;
+        .from(products)
+        .leftJoin(businesses, eq(products.businessId, businesses.id))
+        .where(and(isBusinessUser ? eq(businesses.userId, userId) : undefined));
 
-      if (!id) {
-        const productsResult = await db
-          .select()
-          .from(products)
-          .where(eq(products.businessId, businessId));
-
-        return context.json([...productsResult], 200);
-      } else {
-        const productResult = await db
-          .select()
-          .from(products)
-          .where(and(eq(products.id, id), eq(products.businessId, businessId)))
-          .limit(1);
-        const productFound = productResult[0];
-
-        if (!productFound) {
-          return context.json(
-            { error: "Not Found", reason: "Product not found." },
-            404
-          );
-        }
-
-        return context.json(
-          {
-            ...productSchema.parse({ ...productFound, business: null }),
-          },
-          200
-        );
-      }
+      return context.json(
+        [
+          ...productsResult.map((result) => ({
+            ...result.products,
+            business: includeBusiness ? result.businesses : null,
+          })),
+        ],
+        200
+      );
     } else {
-      if (!id) {
-        const productsResult = await db.select().from(products);
+      const productResult = await db
+        .select()
+        .from(products)
+        .leftJoin(businesses, eq(products.businessId, businesses.id))
+        .where(
+          and(
+            eq(products.id, id),
+            isBusinessUser ? eq(businesses.userId, userId) : undefined
+          )
+        )
+        .limit(1);
+      const productFound = productResult[0];
 
-        return context.json([...productsResult], 200);
-      } else {
-        const productResult = await db
-          .select()
-          .from(products)
-          .where(eq(products.id, id))
-          .limit(1);
-        const productFound = productResult[0];
-
-        if (!productFound) {
-          return context.json(
-            { error: "Not Found", reason: "Product not found." },
-            404
-          );
-        }
-
+      if (!productFound.products) {
         return context.json(
-          {
-            ...productSchema.parse({ ...productFound, business: null }),
-          },
-          200
+          { error: "Not Found", reason: "Product not found." },
+          404
         );
       }
+
+      return context.json(
+        {
+          ...productSchema.parse({
+            ...productFound.products,
+            business: includeBusiness ? productFound.businesses : null,
+          }),
+        },
+        200
+      );
     }
   }
 );

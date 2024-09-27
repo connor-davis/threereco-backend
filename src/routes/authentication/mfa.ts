@@ -1,14 +1,17 @@
 import "dotenv/config";
 
+import { zValidator } from "@hono/zod-validator";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import type { Session } from "hono-sessions";
-import authMiddleware from "../../utilities/authMiddleware";
-import { authenticator } from "otplib";
-import db from "../../db";
-import { eq } from "drizzle-orm";
-import { users } from "../../schemas";
+import { TimeSpan } from "oslo";
+import { HMAC } from "oslo/crypto";
+import { decodeHex, encodeHex } from "oslo/encoding";
+import { createTOTPKeyURI, TOTPController } from "oslo/otp";
 import { z } from "zod";
-import { zValidator } from "@hono/zod-validator";
+import db from "../../db";
+import { users } from "../../schemas";
+import authMiddleware from "../../utilities/authMiddleware";
 
 const mfaRouter = new Hono<{
   Variables: {
@@ -17,103 +20,105 @@ const mfaRouter = new Hono<{
   };
 }>();
 
-mfaRouter.post(
-  "/generate",
-  async (context, next) => await authMiddleware(undefined, context, next),
-  async (context) => {
-    const secret = authenticator.generateSecret();
-    const session = context.get("session");
+const QuerySchema = z.object({
+  code: z.string(),
+});
 
+const totpController = new TOTPController();
+
+mfaRouter.get(
+  "/enable",
+  async (context, next) => await authMiddleware(undefined, context, next),
+
+  async (context) => {
+    const session = context.get("session");
     const userId = session.get("user_id") as string;
 
-    const result = await db
+    const results = await db
       .select()
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
-    const userFound = result[0];
+    const user = results[0];
 
-    if (!userFound) {
+    if (!user)
       return context.json(
-        {
-          error: "Unauthorized",
-          reason: "You are not authorized to access this endpoint.",
-        },
-        401
+        { error: "Not Found", reason: "User not found." },
+        404
       );
-    }
 
-    const service = process.env.MFA_ISSUER ?? "THUSA";
+    const secret = await new HMAC("SHA-1").generateKey();
 
-    const otpAuthentication = authenticator.keyuri(
-      userFound.email,
-      service,
-      secret
-    );
+    const issuer = "Kalimbu Software";
+    const accountName = user.email;
 
     await db
       .update(users)
-      .set({ mfaSecret: secret })
+      .set({ mfaEnabled: true, mfaSecret: encodeHex(secret) })
       .where(eq(users.id, userId));
 
-    return context.text(otpAuthentication, 200);
+    const uri = createTOTPKeyURI(issuer, accountName, secret, {
+      digits: 6,
+      period: new TimeSpan(30, "s"),
+    });
+
+    return context.text(uri, 200);
   }
 );
 
 mfaRouter.post(
   "/verify",
   async (context, next) => await authMiddleware(undefined, context, next),
-  zValidator("json", z.object({ token: z.string() })),
+  zValidator("json", QuerySchema),
   async (context) => {
-    const { token } = await context.req.json();
-    const session = context.get("session");
+    const { code } = await QuerySchema.parseAsync(await context.req.json());
 
+    const session = context.get("session");
     const userId = session.get("user_id") as string;
 
-    const result = await db
+    const results = await db
       .select()
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
-    const userFound = result[0];
+    const user = results[0];
 
-    if (!userFound) {
+    if (!user)
+      return context.json(
+        { error: "Not Found", reason: "User not found." },
+        404
+      );
+
+    const mfaSecret = user.mfaSecret;
+
+    if (!mfaSecret)
+      return context.json(
+        {
+          error: "Not Found",
+          reason: "MFA has not been enabled for this account.",
+        },
+        404
+      );
+
+    const secret = decodeHex(mfaSecret);
+    const otp = await totpController.generate(secret);
+
+    console.log(code, otp);
+
+    const otpVerified = await totpController.verify(code, secret);
+
+    if (!otpVerified)
       return context.json(
         {
           error: "Unauthorized",
-          reason: "You are not authorized to access this endpoint.",
+          reason: "Invalid MFA code. Please try again.",
         },
         401
       );
-    }
-
-    const secret = userFound.mfaSecret;
-
-    if (!secret) {
-      return context.json(
-        {
-          error: "Unauthorized",
-          reason: "User has not setup MFA authentication.",
-        },
-        401
-      );
-    }
-
-    const isValid = authenticator.check(token, secret);
-
-    if (!isValid) {
-      return context.json(
-        {
-          error: "Unauthorized",
-          reason: "MFA authentication failed.",
-        },
-        401
-      );
-    }
 
     await db
       .update(users)
-      .set({ mfaEnabled: true, mfaVerified: true })
+      .set({ mfaVerified: true })
       .where(eq(users.id, userId));
 
     return context.text("ok", 200);

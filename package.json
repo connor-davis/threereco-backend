@@ -19,6 +19,7 @@
     "hono": "^4.4.11",
     "hono-sessions": "^0.5.8",
     "json2csv": "^6.0.0-alpha.2",
+    "oslo": "^1.2.1",
     "otplib": "^12.0.1",
     "postgres": "^3.4.4",
     "uuid": "^10.0.0",

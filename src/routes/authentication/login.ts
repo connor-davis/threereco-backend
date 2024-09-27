@@ -1,9 +1,9 @@
-import { Hono } from "hono";
-import type { LoginModel } from "../../models/login";
-import type { Session } from "hono-sessions";
 import { compareSync } from "bcrypt";
-import db from "../../db";
 import { eq } from "drizzle-orm";
+import { Hono } from "hono";
+import type { Session } from "hono-sessions";
+import db from "../../db";
+import type { LoginModel } from "../../models/login";
 import { userSchema } from "../../models/user";
 import { users } from "../../schemas";
 
@@ -18,13 +18,13 @@ loginRouter.post("/", async (context) => {
   const { email, password } = await context.req.json<LoginModel>();
 
   if (email && password) {
-    const result = await db
+    let result = await db
       .select()
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
 
-    const userFound = result[0];
+    let userFound = result[0];
 
     if (!userFound) {
       return context.json(
@@ -61,6 +61,19 @@ loginRouter.post("/", async (context) => {
     session.set("user_id", userFound.id);
     session.set("user_email", userFound.email);
     session.set("user_role", userFound.role);
+
+    await db
+      .update(users)
+      .set({ mfaVerified: false })
+      .where(eq(users.id, userFound.id));
+
+    result = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    userFound = result[0];
 
     return context.json({ data: userSchema.parse(userFound) }, 200);
   } else {

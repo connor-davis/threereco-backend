@@ -47,22 +47,36 @@ mfaRouter.get(
         404
       );
 
-    const secret = await new HMAC("SHA-1").generateKey();
-
     const issuer = "Kalimbu Software";
     const accountName = user.email;
 
-    await db
-      .update(users)
-      .set({ mfaEnabled: true, mfaSecret: encodeHex(secret) })
-      .where(eq(users.id, userId));
+    if (!user.mfaSecret) {
+      const secret = await new HMAC("SHA-1").generateKey();
 
-    const uri = createTOTPKeyURI(issuer, accountName, secret, {
-      digits: 6,
-      period: new TimeSpan(30, "s"),
-    });
+      await db
+        .update(users)
+        .set({ mfaEnabled: true, mfaSecret: encodeHex(secret) })
+        .where(eq(users.id, userId));
 
-    return context.text(uri, 200);
+      const uri = createTOTPKeyURI(issuer, accountName, secret, {
+        digits: 6,
+        period: new TimeSpan(30, "s"),
+      });
+
+      return context.text(uri, 200);
+    } else {
+      const uri = createTOTPKeyURI(
+        issuer,
+        accountName,
+        decodeHex(user.mfaSecret),
+        {
+          digits: 6,
+          period: new TimeSpan(30, "s"),
+        }
+      );
+
+      return context.text(uri, 200);
+    }
   }
 );
 

@@ -15,11 +15,7 @@ const QuerySchema = z.object({
 deleteCollectionRouter.delete(
   "/",
   async (context, next) =>
-    await authMiddleware(
-      ["System Admin", "Admin"],
-      context,
-      next
-    ),
+    await authMiddleware(["System Admin", "Admin", "Business"], context, next),
   zValidator("query", QuerySchema),
   async (context) => {
     const { id } = await QuerySchema.parseAsync(context.req.query());

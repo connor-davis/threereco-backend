@@ -1,17 +1,16 @@
+import { genSaltSync, hashSync } from "bcrypt";
 import { CookieStore, Session, sessionMiddleware } from "hono-sessions";
 import db, { runMigrations } from "./db";
-import { genSaltSync, hashSync } from "bcrypt";
 
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { csrf } from "hono/csrf";
 import dotenv from "dotenv";
 import { eq } from "drizzle-orm";
+import { Hono } from "hono";
+import routes from "./routes";
+import { users } from "./schemas";
 import logger from "./utilities/logger";
 import requestMiddlewareLogger from "./utilities/requestMiddlewareLogger";
-import routes from "./routes";
-import { secureHeaders } from "hono/secure-headers";
-import { users } from "./schemas";
+import { existsSync, mkdirSync } from "fs";
+import path from "path";
 
 dotenv.config();
 
@@ -22,11 +21,13 @@ const app = new Hono<{
   };
 }>();
 
-app.use(secureHeaders());
-app.use(cors());
-app.use(csrf());
+// app.use(secureHeaders());
+// app.use(cors());
+// app.use(csrf());
 
 const store = new CookieStore();
+
+if (!existsSync(path.join(process.cwd(), "uploads"))) mkdirSync("uploads");
 
 app.use(
   "*",

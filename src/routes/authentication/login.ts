@@ -75,7 +75,7 @@ loginRouter.post("/", async (context) => {
 
     userFound = result[0];
 
-    return context.json({ data: userSchema.parse(userFound) }, 200);
+    return context.json({ ...userSchema.parse(userFound) }, 200);
   } else {
     return context.json(
       {

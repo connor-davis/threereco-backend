@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.8",
     "drizzle-orm": "^0.31.2",
+    "file-type": "^19.5.0",
     "hono": "^4.4.11",
     "hono-sessions": "^0.5.8",
     "json2csv": "^6.0.0-alpha.2",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/bun": "^1.1.10",
     "@types/json2csv": "^5.0.7",
     "@types/node": "^20.11.17",
     "@types/uuid": "^10.0.0",

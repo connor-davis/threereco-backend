@@ -1,7 +1,7 @@
+import { z } from "zod";
 import { businessSchema } from "./business";
 import { collectorSchema } from "./collector";
 import { productSchema } from "./product";
-import { z } from "zod";
 
 export const collectionSchema = z.object({
   id: z.string().uuid(),
@@ -25,7 +25,7 @@ export const collectionSchema = z.object({
 export type Collection = z.infer<typeof collectionSchema>;
 
 export const createCollectionSchema = z.object({
-  businessId: z.string().uuid(),
+  businessId: z.string().uuid().optional(),
   collectorId: z.string().uuid(),
   productId: z.string().uuid(),
   weight: z.number(),

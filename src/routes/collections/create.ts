@@ -31,19 +31,23 @@ createCollectionRouter.post(
     const session = context.get("session");
     const userId = session.get("user_id") as string;
 
-    let { businessId } =
-      collection ||
-      (
+    let businessId = "";
+
+    if (!collection.businessId) {
+      businessId = (
         await db
-          .select({ businessId: businesses.id })
+          .select()
           .from(businesses)
           .where(eq(businesses.userId, userId))
           .limit(1)
-      )[0];
+      )[0].id;
+    }
+
+    console.log(businessId)
 
     await db.insert(collections).values({
       ...collection,
-      businessId: businessId!!,
+      businessId,
     });
 
     return context.json({ ...collection }, 200);

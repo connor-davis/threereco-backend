@@ -1,18 +1,11 @@
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
 import { Hono } from "hono";
-import { Session } from "hono-sessions";
 import db from "../../db";
 import { createCollectionSchema } from "../../models/collection";
-import { businesses, collections } from "../../schemas";
+import { collections } from "../../schemas";
 import authMiddleware from "../../utilities/authMiddleware";
 
-const createCollectionRouter = new Hono<{
-  Variables: {
-    session: Session;
-    session_key_rotation: boolean;
-  };
-}>();
+const createCollectionRouter = new Hono();
 
 createCollectionRouter.post(
   "/",
@@ -28,27 +21,7 @@ createCollectionRouter.post(
       await context.req.json()
     );
 
-    const session = context.get("session");
-    const userId = session.get("user_id") as string;
-
-    let businessId = "";
-
-    if (!collection.businessId) {
-      businessId = (
-        await db
-          .select()
-          .from(businesses)
-          .where(eq(businesses.userId, userId))
-          .limit(1)
-      )[0].id;
-    }
-
-    console.log(businessId)
-
-    await db.insert(collections).values({
-      ...collection,
-      businessId,
-    });
+    await db.insert(collections).values(collection);
 
     return context.json({ ...collection }, 200);
   }

@@ -20,7 +20,9 @@ const mfaRouter = new Hono<{
   };
 }>();
 
-const QuerySchema = z.object({
+const DisableMfaSchema = z.object({ id: z.string().uuid() });
+
+const VerifyMfaSchema = z.object({
   code: z.string(),
 });
 
@@ -81,11 +83,28 @@ mfaRouter.get(
 );
 
 mfaRouter.post(
+  "/disable",
+  async (context, next) =>
+    await authMiddleware(["System Admin", "Admin"], context, next),
+  zValidator("query", DisableMfaSchema),
+  async (context) => {
+    const { id } = await DisableMfaSchema.parseAsync(context.req.query());
+
+    await db
+      .update(users)
+      .set({ mfaSecret: null, mfaEnabled: false })
+      .where(eq(users.id, id));
+
+    return context.text("ok", 200);
+  }
+);
+
+mfaRouter.post(
   "/verify",
   async (context, next) => await authMiddleware(undefined, context, next),
-  zValidator("json", QuerySchema),
+  zValidator("json", VerifyMfaSchema),
   async (context) => {
-    const { code } = await QuerySchema.parseAsync(await context.req.json());
+    const { code } = await VerifyMfaSchema.parseAsync(await context.req.json());
 
     const session = context.get("session");
     const userId = session.get("user_id") as string;

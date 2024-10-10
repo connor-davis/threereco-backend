@@ -6,7 +6,7 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "@hono/node-server": "^1.12.0",
+    "@hono/node-server": "^1.13.1",
     "@hono/zod-openapi": "^0.15.3",
     "@hono/zod-validator": "^0.2.2",
     "@types/crypto-js": "^4.2.2",
@@ -16,9 +16,9 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.8",
-    "drizzle-orm": "^0.31.2",
+    "drizzle-orm": "^0.31.4",
     "file-type": "^19.5.0",
-    "hono": "^4.4.11",
+    "hono": "^4.6.3",
     "hono-sessions": "^0.5.8",
     "json2csv": "^6.0.0-alpha.2",
     "oslo": "^1.2.1",
@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/bun": "^1.1.10",
+    "@types/bun": "^1.1.11",
     "@types/json2csv": "^5.0.7",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.16.11",
     "@types/uuid": "^10.0.0",
-    "tsx": "^4.7.1"
+    "tsx": "^4.19.1"
   }
 }

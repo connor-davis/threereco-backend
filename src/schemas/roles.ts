@@ -1,9 +1,13 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
-export const roles = pgEnum("roles", [
-  "System Admin",
-  "Admin",
-  "Staff",
-  "Business",
-  "Collector",
+const roles = pgEnum("roles", [
+  "system_admin",
+  "admin",
+  "staff",
+  "business",
+  "customer",
 ]);
+
+export const rolesEnumValues = roles.enumValues;
+
+export default roles;

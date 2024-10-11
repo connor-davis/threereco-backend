@@ -1,20 +1,13 @@
-import createRouter from "@/lib/create-router";
-
-import env from "@/lib/env";
-
-import { pinoLogger } from "@/middleware/pino-logger";
-
 import { CookieStore, sessionMiddleware } from "hono-sessions";
-
 import { cors } from "hono/cors";
-
 import { csrf } from "hono/csrf";
-
 import { secureHeaders } from "hono/secure-headers";
 
 import { notFound, onError, serveEmojiFavicon } from "stoker/middlewares";
 
-
+import createRouter from "@/lib/create-router";
+import env from "@/lib/env";
+import { pinoLogger } from "@/middleware/pino-logger";
 
 export default function createApp() {
   const app = createRouter();

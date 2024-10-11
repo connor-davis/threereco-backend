@@ -1,9 +1,11 @@
+import { compare } from "bcrypt";
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuHandler } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
-import { compare } from "bcrypt";
-import { eq } from "drizzle-orm";
+
 import { LoginRoute } from "./login.route";
 
 const loginHandler: KalimbuHandler<LoginRoute> = async (context) => {

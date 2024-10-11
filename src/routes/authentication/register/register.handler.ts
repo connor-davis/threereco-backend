@@ -1,8 +1,10 @@
+import { genSalt, hash } from "bcrypt";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuHandler } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
-import { genSalt, hash } from "bcrypt";
+
 import { RegisterRoute } from "./register.route";
 
 const registerHandler: KalimbuHandler<RegisterRoute> = async (context) => {

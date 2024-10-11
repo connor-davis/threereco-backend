@@ -1,12 +1,14 @@
-import database from "@/lib/database";
-import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
-import users from "@/schemas/user";
 import { eq } from "drizzle-orm";
 import { TimeSpan } from "oslo";
 import { HMAC } from "oslo/crypto";
 import { decodeHex, encodeHex } from "oslo/encoding";
 import { createTOTPKeyURI } from "oslo/otp";
+
+import database from "@/lib/database";
+import HttpStatus from "@/lib/http-status";
+import { KalimbuHandler } from "@/lib/types";
+import users from "@/schemas/user";
+
 import { EnableRoute } from "./enable.route";
 
 const enableHandler: KalimbuHandler<EnableRoute> = async (context) => {

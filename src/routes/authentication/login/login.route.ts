@@ -1,9 +1,11 @@
+import { createRoute } from "@hono/zod-openapi";
+
+import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
+import { createMessageObjectSchema } from "stoker/openapi/schemas";
+
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import { loginUsersSchema, selectUsersSchema } from "@/schemas/user";
-import { createRoute } from "@hono/zod-openapi";
-import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
-import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 const loginRoute = createRoute({
   path: "/authentication/login",

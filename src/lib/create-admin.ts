@@ -1,8 +1,9 @@
+import { genSalt, hash } from "bcrypt";
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import env from "@/lib/env";
 import users from "@/schemas/user";
-import { genSalt, hash } from "bcrypt";
-import { eq } from "drizzle-orm";
 
 export default async function createAdmin() {
   const adminEmail = env.ADMIN_EMAIL ?? "";

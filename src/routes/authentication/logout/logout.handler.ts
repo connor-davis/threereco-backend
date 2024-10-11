@@ -1,5 +1,6 @@
 import HttpStatus from "@/lib/http-status";
 import { KalimbuHandler } from "@/lib/types";
+
 import { LogoutRoute } from "./logout.route";
 
 const logoutHandler: KalimbuHandler<LogoutRoute> = (context) => {

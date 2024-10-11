@@ -1,8 +1,10 @@
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuHandler } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
-import { eq } from "drizzle-orm";
+
 import { CheckRoute } from "./check.route";
 
 const checkHandler: KalimbuHandler<CheckRoute> = async (context) => {

@@ -1,6 +1,7 @@
+import { createRoute, z } from "@hono/zod-openapi";
+
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
-import { createRoute, z } from "@hono/zod-openapi";
 
 const logoutRoute = createRoute({
   path: "/authentication/logout",

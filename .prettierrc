@@ -4,17 +4,12 @@
   "tabWidth": 2,
   "trailingComma": "es5",
   "importOrder": [
-    "^(hono?/?([a-zA-Z/]*))$",
-    "^(hono?-?([a-zA-Z/]*))$",
+    "^hono|@hono|hono-$",
     "<THIRD_PARTY_MODULES>",
-    "^@/routes(.*)$",
     "^@/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

@@ -1,9 +1,10 @@
 import type { Context, Next } from "hono";
 
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import users from "@/schemas/user";
-import { eq } from "drizzle-orm";
 
 const authenticationMiddleware = async (
   requiredRoles: string[] | undefined,

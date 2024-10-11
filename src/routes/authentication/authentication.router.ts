@@ -2,6 +2,7 @@ import createRouter from "@/lib/create-router";
 import checkRoute from "@/routes/authentication/check/check.route";
 import loginHandler from "@/routes/authentication/login/login.handler";
 import loginRoute from "@/routes/authentication/login/login.route";
+
 import checkHandler from "./check/check.handler";
 import logoutHandler from "./logout/logout.handler";
 import logoutRoute from "./logout/logout.route";

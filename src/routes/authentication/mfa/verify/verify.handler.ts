@@ -1,8 +1,10 @@
+import { decodeHex } from "oslo/encoding";
+import { TOTPController } from "oslo/otp";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuHandler } from "@/lib/types";
-import { decodeHex } from "oslo/encoding";
-import { TOTPController } from "oslo/otp";
+
 import { VerifyRoute } from "./verify.route";
 
 const totpController = new TOTPController();

@@ -1,13 +1,11 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import users from "./user";
 
 const collectors = pgTable("collectors", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   idNumber: text("id_number").notNull(),

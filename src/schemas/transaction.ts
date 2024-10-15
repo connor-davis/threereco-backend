@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { decimalNumber } from "@/lib/types";
@@ -6,9 +6,7 @@ import { decimalNumber } from "@/lib/types";
 import businesses from "./business";
 
 export const transactions = pgTable("transactions", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   buyerId: uuid("buyer_id").notNull(),
   sellerId: uuid("seller_id").notNull(),
   productId: uuid("product_id").notNull(),

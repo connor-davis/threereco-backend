@@ -12,7 +12,7 @@ export const runMigrations = () =>
   migrate(drizzle(migrationClient), {
     migrationsFolder: "./drizzle",
     migrationsSchema: "public",
-    migrationsTable: "charos_api_migrations",
+    migrationsTable: "threereco_api_migrations",
   });
 
 const queryClient = postgres(env.DATABASE_URL ?? "");

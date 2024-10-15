@@ -7,6 +7,6 @@ export default defineConfig({
   migrations: {
     prefix: "timestamp",
     schema: "./src/schemas",
-    table: "charos_api_migrations",
+    table: "threereco_api_migrations",
   },
 });

@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -6,9 +6,7 @@ import businessTypes from "./businessTypes";
 import users from "./user";
 
 const businesses = pgTable("businesses", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").unique().notNull(),
   type: businessTypes("type").default("Recycler").notNull(),
   description: text("description"),

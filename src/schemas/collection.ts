@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { decimalNumber } from "@/lib/types";
@@ -8,9 +8,7 @@ import collectors from "./collector";
 import { products } from "./products";
 
 export const collections = pgTable("collections", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   businessId: uuid("business_id").notNull(),
   collectorId: uuid("collector_id").notNull(),
   productId: uuid("product_id").notNull(),

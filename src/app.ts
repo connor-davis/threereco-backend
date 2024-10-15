@@ -4,10 +4,11 @@ import createApp from "@/lib/create-app";
 
 import authentication from "./routes/authentication/authentication.router";
 import index from "./routes/index.router";
+import users from "./routes/users/users.router";
 
 const app = createApp();
 
-const apiRoutes = [index, authentication];
+const apiRoutes = [index, authentication, users];
 
 configureOpenAPI(app);
 configureScalar(app);

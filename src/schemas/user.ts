@@ -56,6 +56,12 @@ export const registerUsersSchema = insertUsersSchema.pick({
   password: true,
 });
 
+export const createUsersSchema = insertUsersSchema.pick({
+  email: true,
+  password: true,
+  role: true,
+});
+
 export const updateUsersSchema = insertUsersSchema.pick({
   email: true,
   role: true,

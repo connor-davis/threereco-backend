@@ -34,3 +34,5 @@ const updateBusinessHandler: KalimbuRoute<UpdateBusinessRoute> = async (
     HttpStatus.OK
   );
 };
+
+export default updateBusinessHandler;

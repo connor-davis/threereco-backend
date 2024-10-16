@@ -6,14 +6,11 @@ import deleteUserHandler from "./delete/delete.handler";
 import deleteUserRoute from "./delete/delete.route";
 import updateUserHandler from "./update/update.handler";
 import updateUserRoute from "./update/update.route";
-import listUsersHandler from "./view/list.handler";
-import listUsersRoute from "./view/list.route";
-import singleUserHandler from "./view/single.handler";
-import singleUserRoute from "./view/single.route";
+import viewUsersHandler from "./view/view.handler";
+import viewUsersRoute from "./view/view.route";
 
 const users = createRouter()
-  .openapi(listUsersRoute, listUsersHandler)
-  .openapi(singleUserRoute, singleUserHandler)
+  .openapi(viewUsersRoute, viewUsersHandler)
   .openapi(createUserRoute, createUserHandler)
   .openapi(updateUserRoute, updateUserHandler)
   .openapi(deleteUserRoute, deleteUserHandler);

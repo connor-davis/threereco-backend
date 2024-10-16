@@ -5,22 +5,24 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
-import authenticationMiddleware from "@/middleware/authentication-middleware";
-import { selectUsersSchema } from "@/schemas/user";
+import { selectBusinessesSchema } from "@/schemas/business";
 
-const singleUserRoute = createRoute({
-  path: "/users/{id}",
+const viewBusinessesRoute = createRoute({
+  path: "/businesses",
   method: "get",
-  tags: TAGS.USERS,
+  tags: TAGS.BUSINESSES,
   request: {
-    params: z.object({
-      id: z.string().uuid(),
+    query: z.object({
+      id: z.string().uuid().optional().nullable(),
     }),
   },
   responses: {
-    [HttpStatus.OK]: jsonContent(selectUsersSchema, "The user object."),
+    [HttpStatus.OK]: jsonContent(
+      z.union([selectBusinessesSchema, z.array(selectBusinessesSchema)]),
+      "The business object/s."
+    ),
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The user was not found."),
+      createMessageObjectSchema("The business was not found."),
       "The not-found error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
@@ -30,10 +32,8 @@ const singleUserRoute = createRoute({
       "The un-authorized error message."
     ),
   },
-  middleware: async (context, next) =>
-    await authenticationMiddleware(undefined, context, next),
 });
 
-export type SingleUserRoute = typeof singleUserRoute;
+export type ViewBusinessesRoute = typeof viewBusinessesRoute;
 
-export default singleUserRoute;
+export default viewBusinessesRoute;

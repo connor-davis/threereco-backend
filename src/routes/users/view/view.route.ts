@@ -8,12 +8,24 @@ import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 import { selectUsersSchema } from "@/schemas/user";
 
-const listUsersRoute = createRoute({
+const viewUsersRoute = createRoute({
   path: "/users",
   method: "get",
   tags: TAGS.USERS,
+  request: {
+    query: z.object({
+      id: z.string().uuid().optional().nullable(),
+    }),
+  },
   responses: {
-    [HttpStatus.OK]: jsonContent(z.array(selectUsersSchema), "The users list."),
+    [HttpStatus.OK]: jsonContent(
+      z.union([selectUsersSchema, z.array(selectUsersSchema)]),
+      "The user object/s."
+    ),
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("The user was not found."),
+      "The not-found error message."
+    ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
         "You are not authorized to access this endpoint."
@@ -22,13 +34,9 @@ const listUsersRoute = createRoute({
     ),
   },
   middleware: async (context, next) =>
-    await authenticationMiddleware(
-      ["system_admin", "admin", "staff"],
-      context,
-      next
-    ),
+    await authenticationMiddleware(undefined, context, next),
 });
 
-export type ListUsersRoute = typeof listUsersRoute;
+export type ViewUsersRoute = typeof viewUsersRoute;
 
-export default listUsersRoute;
+export default viewUsersRoute;

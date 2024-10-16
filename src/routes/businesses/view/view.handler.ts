@@ -12,6 +12,9 @@ const viewBusinessesHandler: KalimbuHandler<ViewBusinessesRoute> = async (
   if (query.id) {
     const business = await database.query.businesses.findFirst({
       where: (businesses, { eq }) => eq(businesses.id, query.id!),
+      with: {
+        user: query.includeUser,
+      },
     });
 
     if (!business)
@@ -22,7 +25,11 @@ const viewBusinessesHandler: KalimbuHandler<ViewBusinessesRoute> = async (
 
     return context.json(business, HttpStatus.OK);
   } else {
-    const businesses = await database.query.businesses.findMany();
+    const businesses = await database.query.businesses.findMany({
+      with: {
+        user: query.includeUser,
+      },
+    });
 
     return context.json(businesses, HttpStatus.OK);
   }

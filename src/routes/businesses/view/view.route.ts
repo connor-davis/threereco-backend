@@ -14,6 +14,7 @@ const viewBusinessesRoute = createRoute({
   request: {
     query: z.object({
       id: z.string().uuid().optional().nullable(),
+      includeUser: z.coerce.boolean().default(false),
     }),
   },
   responses: {

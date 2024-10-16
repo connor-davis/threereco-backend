@@ -5,14 +5,14 @@ import { TOTPController } from "oslo/otp";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users from "@/schemas/user";
 
 import { PasswordResetRoute } from "./passwordReset.route";
 
 const totpController = new TOTPController();
 
-const passwordResetHandler: KalimbuHandler<PasswordResetRoute> = async (
+const passwordResetHandler: KalimbuRoute<PasswordResetRoute> = async (
   context
 ) => {
   const session = context.var.session;

@@ -2,12 +2,12 @@ import { genSalt, hash } from "bcrypt";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
 
 import { RegisterRoute } from "./register.route";
 
-const registerHandler: KalimbuHandler<RegisterRoute> = async (context) => {
+const registerHandler: KalimbuRoute<RegisterRoute> = async (context) => {
   const payload = context.req.valid("json");
 
   const existingUser = await database.query.users.findFirst({

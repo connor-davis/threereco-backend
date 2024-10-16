@@ -2,12 +2,12 @@ import { eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
 
 import { UpdateUserRoute } from "./update.route";
 
-const updateUserHandler: KalimbuHandler<UpdateUserRoute> = async (context) => {
+const updateUserHandler: KalimbuRoute<UpdateUserRoute> = async (context) => {
   const param = context.req.param();
   const payload = context.req.valid("json");
 

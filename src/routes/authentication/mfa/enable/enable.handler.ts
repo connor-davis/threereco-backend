@@ -6,12 +6,12 @@ import { createTOTPKeyURI } from "oslo/otp";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users from "@/schemas/user";
 
 import { EnableRoute } from "./enable.route";
 
-const enableHandler: KalimbuHandler<EnableRoute> = async (context) => {
+const enableHandler: KalimbuRoute<EnableRoute> = async (context) => {
   const session = context.var.session;
   const userId = session.get("user_id") as string;
 

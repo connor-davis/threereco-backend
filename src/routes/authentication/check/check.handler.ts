@@ -2,12 +2,12 @@ import { eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
 
 import { CheckRoute } from "./check.route";
 
-const checkHandler: KalimbuHandler<CheckRoute> = async (context) => {
+const checkHandler: KalimbuRoute<CheckRoute> = async (context) => {
   const session = context.var.session;
   const userId = session.get("user_id") as string;
 

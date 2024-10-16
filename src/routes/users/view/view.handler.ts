@@ -1,10 +1,10 @@
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 
 import { ViewUsersRoute } from "./view.route";
 
-const viewUsersHandler: KalimbuHandler<ViewUsersRoute> = async (context) => {
+const viewUsersHandler: KalimbuRoute<ViewUsersRoute> = async (context) => {
   const query = context.req.valid("query");
 
   if (query.id) {

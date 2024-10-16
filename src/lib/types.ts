@@ -1,4 +1,5 @@
 import { RouteConfig, RouteHandler } from "@hono/zod-openapi";
+import { MiddlewareHandler } from "hono";
 import { PinoLogger } from "hono-pino";
 import { Session } from "hono-sessions";
 
@@ -12,10 +13,12 @@ export type KalimbuConfig = {
   };
 };
 
-export type KalimbuHandler<R extends RouteConfig> = RouteHandler<
+export type KalimbuRoute<R extends RouteConfig> = RouteHandler<
   R,
   KalimbuConfig
 >;
+
+export type KalimbuMiddleware = MiddlewareHandler<KalimbuConfig>;
 
 export const decimalNumber = customType<{ data: number }>({
   dataType() {

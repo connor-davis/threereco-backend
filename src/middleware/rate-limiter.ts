@@ -1,7 +1,12 @@
 import { Context, Next } from "hono";
 
-const rateLimiterMiddleware = async (context: Context, next: Next) => {
-  next();
+import { KalimbuMiddleware } from "@/lib/types";
+
+const rateLimiterMiddleware: KalimbuMiddleware = async (
+  context: Context,
+  next: Next
+) => {
+  await next();
 };
 
 export default rateLimiterMiddleware;

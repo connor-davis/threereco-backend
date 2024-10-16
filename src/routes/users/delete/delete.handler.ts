@@ -2,12 +2,12 @@ import { eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users from "@/schemas/user";
 
 import { DeleteUserRoute } from "./delete.route";
 
-const deleteUserHandler: KalimbuHandler<DeleteUserRoute> = async (context) => {
+const deleteUserHandler: KalimbuRoute<DeleteUserRoute> = async (context) => {
   const param = context.req.param();
 
   const user = await database.query.users.findFirst({

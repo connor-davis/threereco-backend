@@ -8,6 +8,7 @@ import { notFound, onError, serveEmojiFavicon } from "stoker/middlewares";
 import createRouter from "@/lib/create-router";
 import env from "@/lib/env";
 import { pinoLogger } from "@/middleware/pino-logger";
+import rateLimiterMiddleware from "@/middleware/rate-limiter";
 
 export default function createApp() {
   const app = createRouter();
@@ -47,6 +48,8 @@ export default function createApp() {
       },
     })
   );
+
+  app.use(rateLimiterMiddleware);
 
   return app;
 }

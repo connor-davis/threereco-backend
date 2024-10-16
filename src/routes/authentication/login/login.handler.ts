@@ -3,12 +3,12 @@ import { eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 import users, { selectUsersSchema } from "@/schemas/user";
 
 import { LoginRoute } from "./login.route";
 
-const loginHandler: KalimbuHandler<LoginRoute> = async (context) => {
+const loginHandler: KalimbuRoute<LoginRoute> = async (context) => {
   const payload = context.req.valid("json");
 
   const existingUser = await database.query.users.findFirst({

@@ -3,13 +3,13 @@ import { TOTPController } from "oslo/otp";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import { KalimbuHandler } from "@/lib/types";
+import { KalimbuRoute } from "@/lib/types";
 
 import { VerifyRoute } from "./verify.route";
 
 const totpController = new TOTPController();
 
-const verifyHandler: KalimbuHandler<VerifyRoute> = async (context) => {
+const verifyHandler: KalimbuRoute<VerifyRoute> = async (context) => {
   const session = context.var.session;
   const userId = session.get("user_id") as string;
 

@@ -17,10 +17,27 @@ const updateBusinessHandler: KalimbuRoute<UpdateBusinessRoute> = async (
     where: (businesses, { eq }) => eq(businesses.id, query.id),
   });
 
+  const existingBusinessWithName = await database.query.businesses.findFirst({
+    where: (businesses, { eq, like, or, and, not }) =>
+      and(
+        or(
+          eq(businesses.name, payload.name),
+          like(businesses.name, payload.name.toLowerCase())
+        ),
+        not(eq(businesses.id, query.id))
+      ),
+  });
+
   if (!existingBusiness)
     return context.json(
       { message: "The business was not found." },
       HttpStatus.NOT_FOUND
+    );
+
+  if (existingBusinessWithName)
+    return context.json(
+      { message: "There is already a business with that business name." },
+      HttpStatus.CONFLICT
     );
 
   const business = await database

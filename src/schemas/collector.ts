@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import users from "./user";
+import users, { selectUsersSchema } from "./user";
 
 const collectors = pgTable("collectors", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
@@ -11,9 +11,9 @@ const collectors = pgTable("collectors", {
   idNumber: text("id_number").notNull(),
   phoneNumber: text("phone_number").notNull(),
   address: text("address").notNull(),
-  city: text("city"),
-  province: text("province"),
-  zipCode: text("zip_code"),
+  city: text("city").notNull(),
+  province: text("province").notNull(),
+  zipCode: text("zip_code").notNull(),
   bankName: text("bank_name").notNull(),
   bankAccountHolder: text("bank_account_holder").notNull(),
   bankAccountNumber: text("bank_account_number").notNull(),
@@ -26,7 +26,10 @@ const collectors = pgTable("collectors", {
     .notNull(),
 });
 
-export const selectCollectorsSchema = createSelectSchema(collectors);
+export const selectCollectorsSchema = createSelectSchema(collectors).extend({
+  user: selectUsersSchema.optional(),
+});
+
 export const insertCollectorsSchema = createInsertSchema(collectors).omit({
   id: true,
   createdAt: true,

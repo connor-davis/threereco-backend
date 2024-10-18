@@ -5,12 +5,13 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
-import { selectBusinessesSchema } from "@/schemas/business";
+import authenticationMiddleware from "@/middleware/authentication-middleware";
+import { selectCollectorsSchema } from "@/schemas/collector";
 
-const viewBusinessesRoute = createRoute({
-  path: "/businesses",
+const viewCollectorsRoute = createRoute({
+  path: "/collectors",
   method: "get",
-  tags: TAGS.BUSINESSES,
+  tags: TAGS.COLLECTORS,
   request: {
     query: z.object({
       id: z.string().uuid().optional().nullable(),
@@ -22,11 +23,11 @@ const viewBusinessesRoute = createRoute({
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      z.union([selectBusinessesSchema, z.array(selectBusinessesSchema)]),
-      "The business object/s."
+      z.union([selectCollectorsSchema, z.array(selectCollectorsSchema)]),
+      "The collector object/s."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The business was not found."),
+      createMessageObjectSchema("The collector was not found."),
       "The not-found error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
@@ -36,8 +37,10 @@ const viewBusinessesRoute = createRoute({
       "The un-authorized error message."
     ),
   },
+  middleware: async (context, next) =>
+    await authenticationMiddleware(undefined, context, next),
 });
 
-export type ViewBusinessesRoute = typeof viewBusinessesRoute;
+export type ViewCollectorsRoute = typeof viewCollectorsRoute;
 
-export default viewBusinessesRoute;
+export default viewCollectorsRoute;

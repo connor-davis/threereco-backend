@@ -7,36 +7,41 @@ import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 import {
-  insertBusinessesSchema,
-  selectBusinessesSchema,
-} from "@/schemas/business";
+  insertCollectorsSchema,
+  selectCollectorsSchema,
+} from "@/schemas/collector";
 
-const updateBusinessRoute = createRoute({
-  path: "/businesses",
+const updateCollectorRoute = createRoute({
+  path: "/collectors",
   method: "put",
-  tags: TAGS.BUSINESSES,
+  tags: TAGS.COLLECTORS,
   request: {
     query: z.object({
       id: z.string().uuid(),
     }),
     body: jsonContent(
-      insertBusinessesSchema,
-      "The business object for the updated business."
+      insertCollectorsSchema,
+      "The collector object for the updated collector."
     ),
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      selectBusinessesSchema,
-      "The business object for the updated business."
+      selectCollectorsSchema,
+      "The collector object for the updated collector."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The business was not found."),
+      createMessageObjectSchema("The collector was not found."),
       "The not-found error message."
     ),
     [HttpStatus.CONFLICT]: jsonContent(
-      createMessageObjectSchema(
-        "There is already a business with that business name."
-      ),
+      z.union([
+        createMessageObjectSchema(
+          "There is already a collector with that ID number."
+        ),
+        createMessageObjectSchema(
+          "There is already a collector with that account number."
+        ),
+      ]),
       "The conflict error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
@@ -54,6 +59,6 @@ const updateBusinessRoute = createRoute({
     ),
 });
 
-export type UpdateBusinessRoute = typeof updateBusinessRoute;
+export type UpdateCollectorRoute = typeof updateCollectorRoute;
 
-export default updateBusinessRoute;
+export default updateCollectorRoute;

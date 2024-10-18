@@ -6,38 +6,28 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
-import {
-  insertBusinessesSchema,
-  selectBusinessesSchema,
-} from "@/schemas/business";
 
-const updateBusinessRoute = createRoute({
-  path: "/businesses",
-  method: "put",
-  tags: TAGS.BUSINESSES,
+const deleteCollectorRoute = createRoute({
+  path: "/collectors",
+  method: "delete",
+  tags: TAGS.COLLECTORS,
   request: {
     query: z.object({
       id: z.string().uuid(),
     }),
-    body: jsonContent(
-      insertBusinessesSchema,
-      "The business object for the updated business."
-    ),
   },
   responses: {
-    [HttpStatus.OK]: jsonContent(
-      selectBusinessesSchema,
-      "The business object for the updated business."
-    ),
+    [HttpStatus.OK]: {
+      content: {
+        "text/plain": {
+          schema: z.string().default("ok"),
+        },
+      },
+      description: "The ok response text.",
+    },
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The business was not found."),
+      createMessageObjectSchema("The collector was not found."),
       "The not-found error message."
-    ),
-    [HttpStatus.CONFLICT]: jsonContent(
-      createMessageObjectSchema(
-        "There is already a business with that business name."
-      ),
-      "The conflict error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
@@ -54,6 +44,6 @@ const updateBusinessRoute = createRoute({
     ),
 });
 
-export type UpdateBusinessRoute = typeof updateBusinessRoute;
+export type DeleteCollectorRoute = typeof deleteCollectorRoute;
 
-export default updateBusinessRoute;
+export default deleteCollectorRoute;

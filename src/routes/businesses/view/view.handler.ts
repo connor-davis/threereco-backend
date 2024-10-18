@@ -1,6 +1,7 @@
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
+import { selectBusinessesSchema } from "@/schemas/business";
 
 import { ViewBusinessesRoute } from "./view.route";
 
@@ -9,7 +10,20 @@ const viewBusinessesHandler: KalimbuRoute<ViewBusinessesRoute> = async (
 ) => {
   const query = context.req.valid("query");
 
-  if (query.id) {
+  console.log(query);
+
+  if (!query.id) {
+    const businesses = await database.query.businesses.findMany({
+      with: {
+        user: query.includeUser,
+      },
+    });
+
+    return context.json(
+      businesses.map((business) => selectBusinessesSchema.parse(business)),
+      HttpStatus.OK
+    );
+  } else {
     const business = await database.query.businesses.findFirst({
       where: (businesses, { eq }) => eq(businesses.id, query.id!),
       with: {
@@ -23,15 +37,7 @@ const viewBusinessesHandler: KalimbuRoute<ViewBusinessesRoute> = async (
         HttpStatus.NOT_FOUND
       );
 
-    return context.json(business, HttpStatus.OK);
-  } else {
-    const businesses = await database.query.businesses.findMany({
-      with: {
-        user: query.includeUser,
-      },
-    });
-
-    return context.json(businesses, HttpStatus.OK);
+    return context.json(selectBusinessesSchema.parse(business), HttpStatus.OK);
   }
 };
 

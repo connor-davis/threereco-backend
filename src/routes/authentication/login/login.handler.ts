@@ -35,7 +35,7 @@ const loginHandler: KalimbuRoute<LoginRoute> = async (context) => {
   const session = context.var.session;
 
   session.set("user_id", existingUser.id);
-  session.set("user_email", existingUser.email);
+  session.set("user_role", existingUser.role);
 
   const loggedInUser = await database
     .update(users)

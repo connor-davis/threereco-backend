@@ -4,9 +4,9 @@ import { relations } from "drizzle-orm";
 import { decimal, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import businesses from "./business";
-import collectors from "./collector";
-import { products } from "./products";
+import businesses, { selectBusinessesSchema } from "./business";
+import collectors, { selectCollectorsSchema } from "./collector";
+import { products, selectProductsSchema } from "./products";
 
 export const collections = pgTable("collections", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
@@ -22,7 +22,11 @@ export const collections = pgTable("collections", {
     .notNull(),
 });
 
-export const selectCollectionsSchema = createSelectSchema(collections);
+export const selectCollectionsSchema = createSelectSchema(collections).extend({
+  business: selectBusinessesSchema.optional().nullable(),
+  collector: selectCollectorsSchema.optional().nullable(),
+  product: selectProductsSchema.optional().nullable(),
+});
 
 export const insertCollectionsSchema = createInsertSchema(collections)
   .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })

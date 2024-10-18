@@ -60,25 +60,7 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
   for (const collection of collections.map((collection) =>
     selectCollectionsSchema.parse(collection)
   )) {
-    csvString += `"${collection.business?.name ?? "--"}","${collection.business?.type ?? "--"}","${
-      collection.business?.description ?? "--"
-    }","${collection.business?.phoneNumber ?? "--"}","${collection.business?.address ?? "--"}","${
-      collection.business?.city ?? "--"
-    }","${collection.business?.province ?? "--"}","${collection.business?.zipCode ?? "--"}","${
-      collection.business?.user?.email ?? "--"
-    }","${collection.collector?.firstName ?? "--"}","${collection.collector?.lastName ?? "--"}","${
-      collection.collector?.idNumber ?? "--"
-    }","${collection.collector?.phoneNumber ?? "--"}","${collection.collector?.address ?? "--"}","${
-      collection.collector?.city ?? "--"
-    }","${collection.collector?.province ?? "--"}","${collection.collector?.zipCode ?? "--"}","${
-      collection.collector?.bankName ?? "--"
-    }","${collection.collector?.bankAccountHolder ?? "--"}","${
-      collection.collector?.bankAccountNumber ?? "--"
-    }","${collection.collector?.user?.email ?? "--"}","${collection.product?.name ?? "--"}","${
-      collection.product?.gwCode ?? "--"
-    }","${collection.product?.carbonFactor ?? "--"}","${collection.product?.price ?? "--"}","${
-      collection.weight ?? "--"
-    }","${collection.createdAt ? format(collection.createdAt, "PPP") : "--"}"\n`;
+    csvString += `"${collection.business?.name ?? "--"}","${collection.business?.type ?? "--"}","${collection.business?.description ?? "--"}","${collection.business?.phoneNumber ?? "--"}","${collection.business?.address ?? "--"}","${collection.business?.city ?? "--"}","${collection.business?.province ?? "--"}","${collection.business?.zipCode ?? "--"}","${collection.business?.user?.email ?? "--"}","${collection.collector?.firstName ?? "--"}","${collection.collector?.lastName ?? "--"}","${collection.collector?.idNumber ?? "--"}","${collection.collector?.phoneNumber ?? "--"}","${collection.collector?.address ?? "--"}","${collection.collector?.city ?? "--"}","${collection.collector?.province ?? "--"}","${collection.collector?.zipCode ?? "--"}","${collection.collector?.bankName ?? "--"}","${collection.collector?.bankAccountHolder ?? "--"}","${collection.collector?.bankAccountNumber ?? "--"}","${collection.collector?.user?.email ?? "--"}","${collection.product?.name ?? "--"}","${collection.product?.gwCode ?? "--"}","${collection.product?.carbonFactor ?? "--"}","${collection.product?.price ?? "--"}","${collection.weight ?? "--"}","${collection.createdAt ? format(collection.createdAt, "PPP") : "--"}"\n`;
   }
 
   return context.text(csvString, HttpStatus.OK);

@@ -1,5 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
+import { subDays } from "date-fns";
 import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
@@ -13,8 +14,8 @@ const exportCollectionsRoute = createRoute({
   tags: TAGS.COLLECTIONS,
   request: {
     query: z.object({
-      startDate: z.coerce.date(),
-      endDate: z.coerce.date(),
+      startDate: z.coerce.date().default(subDays(new Date(), 7)),
+      endDate: z.coerce.date().default(new Date()),
     }),
   },
   responses: {

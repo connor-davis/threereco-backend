@@ -4,6 +4,8 @@ import createCollectionHandler from "./create/create.handler";
 import createCollectionRoute from "./create/create.route";
 import deleteCollectionHandler from "./delete/delete.handler";
 import deleteCollectionRoute from "./delete/delete.route";
+import exportCollectionsHandler from "./export/export.handler";
+import exportCollectionsRoute from "./export/export.route";
 import updateCollectionHandler from "./update/update.handler";
 import updateCollectionRoute from "./update/update.route";
 import viewCollectionsHandler from "./view/view.handler";
@@ -13,6 +15,7 @@ const collections = createRouter()
   .openapi(viewCollectionsRoute, viewCollectionsHandler)
   .openapi(createCollectionRoute, createCollectionHandler)
   .openapi(deleteCollectionRoute, deleteCollectionHandler)
-  .openapi(updateCollectionRoute, updateCollectionHandler);
+  .openapi(updateCollectionRoute, updateCollectionHandler)
+  .openapi(exportCollectionsRoute, exportCollectionsHandler);
 
 export default collections;

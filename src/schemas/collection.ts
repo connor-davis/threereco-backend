@@ -13,7 +13,7 @@ export const collections = pgTable("collections", {
   businessId: uuid("business_id").notNull(),
   collectorId: uuid("collector_id").notNull(),
   productId: uuid("product_id").notNull(),
-  weight: decimal("price").notNull(),
+  weight: decimal("weight").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

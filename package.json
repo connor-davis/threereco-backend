@@ -7,6 +7,7 @@
   "dependencies": {
     "@hono/node-server": "^1.13.2",
     "@hono/zod-openapi": "^0.16.4",
+    "@iwsio/json-csv-node": "^6.1.7",
     "@scalar/hono-api-reference": "^0.5.153",
     "bcrypt": "^5.1.1",
     "date-fns": "^4.1.0",

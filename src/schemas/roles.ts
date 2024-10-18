@@ -5,7 +5,7 @@ const roles = pgEnum("roles", [
   "admin",
   "staff",
   "business",
-  "customer",
+  "collector",
 ]);
 
 export const rolesEnumValues = roles.enumValues;

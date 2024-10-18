@@ -1,9 +1,11 @@
+import { eq } from "drizzle-orm";
 import { decodeHex } from "oslo/encoding";
 import { TOTPController } from "oslo/otp";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
+import users from "@/schemas/user";
 
 import { VerifyRoute } from "./verify.route";
 
@@ -41,6 +43,11 @@ const verifyHandler: KalimbuRoute<VerifyRoute> = async (context) => {
       { message: "MFA verification failure." },
       HttpStatus.NOT_ACCEPTABLE
     );
+
+  await database
+    .update(users)
+    .set({ mfaEnabled: true, mfaVerified: true })
+    .where(eq(users.id, userId));
 
   return context.text("ok", HttpStatus.OK);
 };

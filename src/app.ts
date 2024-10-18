@@ -6,11 +6,19 @@ import authentication from "./routes/authentication/authentication.router";
 import businesses from "./routes/businesses/businesses.router";
 import collectors from "./routes/collectors/collectors.router";
 import index from "./routes/index.router";
+import products from "./routes/products/products.router";
 import users from "./routes/users/users.router";
 
 const app = createApp();
 
-const apiRoutes = [index, authentication, users, businesses, collectors];
+const apiRoutes = [
+  index,
+  authentication,
+  users,
+  businesses,
+  collectors,
+  products,
+];
 
 configureOpenAPI(app);
 configureScalar(app);

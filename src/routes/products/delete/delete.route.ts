@@ -6,28 +6,27 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
-import { selectBusinessesSchema } from "@/schemas/business";
 
-const viewBusinessesRoute = createRoute({
-  path: "/businesses",
-  method: "get",
-  tags: TAGS.BUSINESSES,
+const deleteProductRoute = createRoute({
+  path: "/products",
+  method: "delete",
+  tags: TAGS.PRODUCTS,
   request: {
     query: z.object({
-      id: z.string().uuid().optional().nullable(),
-      includeUser: z
-        .enum(["true", "false", "1", "0"])
-        .default("false")
-        .transform((value) => value === "true" || value === "1"),
+      id: z.string().uuid(),
     }),
   },
   responses: {
-    [HttpStatus.OK]: jsonContent(
-      z.union([selectBusinessesSchema, z.array(selectBusinessesSchema)]),
-      "The business object/s."
-    ),
+    [HttpStatus.OK]: {
+      content: {
+        "text/plain": {
+          schema: z.string().default("ok"),
+        },
+      },
+      description: "The ok response text.",
+    },
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The business was not found."),
+      createMessageObjectSchema("The product was not found."),
       "The not-found error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
@@ -45,6 +44,6 @@ const viewBusinessesRoute = createRoute({
     ),
 });
 
-export type ViewBusinessesRoute = typeof viewBusinessesRoute;
+export type DeleteProductRoute = typeof deleteProductRoute;
 
-export default viewBusinessesRoute;
+export default deleteProductRoute;

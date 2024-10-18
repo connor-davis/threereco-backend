@@ -6,29 +6,33 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
-import { selectBusinessesSchema } from "@/schemas/business";
+import { insertProductsSchema, selectProductsSchema } from "@/schemas/products";
 
-const viewBusinessesRoute = createRoute({
-  path: "/businesses",
-  method: "get",
-  tags: TAGS.BUSINESSES,
+const updateProductRoute = createRoute({
+  path: "/products",
+  method: "put",
+  tags: TAGS.PRODUCTS,
   request: {
     query: z.object({
-      id: z.string().uuid().optional().nullable(),
-      includeUser: z
-        .enum(["true", "false", "1", "0"])
-        .default("false")
-        .transform((value) => value === "true" || value === "1"),
+      id: z.string().uuid(),
     }),
+    body: jsonContent(
+      insertProductsSchema,
+      "The product object for the updated product."
+    ),
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      z.union([selectBusinessesSchema, z.array(selectBusinessesSchema)]),
-      "The business object/s."
+      selectProductsSchema,
+      "The product object for the updated product."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The business was not found."),
+      createMessageObjectSchema("The product was not found."),
       "The not-found error message."
+    ),
+    [HttpStatus.CONFLICT]: jsonContent(
+      createMessageObjectSchema("There is already a product with that name."),
+      "The conflict error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
@@ -45,6 +49,6 @@ const viewBusinessesRoute = createRoute({
     ),
 });
 
-export type ViewBusinessesRoute = typeof viewBusinessesRoute;
+export type UpdateProductRoute = typeof updateProductRoute;
 
-export default viewBusinessesRoute;
+export default updateProductRoute;

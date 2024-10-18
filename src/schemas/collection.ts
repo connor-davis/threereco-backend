@@ -25,7 +25,7 @@ export const collections = pgTable("collections", {
 export const selectCollectionsSchema = createSelectSchema(collections);
 
 export const insertCollectionsSchema = createInsertSchema(collections)
-  .omit({ businessId: true })
+  .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })
   .extend({ businessId: z.string().uuid().optional().nullable() });
 
 export const collectionBusiness = relations(collections, ({ one }) => ({

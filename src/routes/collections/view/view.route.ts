@@ -7,27 +7,32 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import HttpStatus from "@/lib/http-status";
 import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
-import { selectProductsSchema } from "@/schemas/products";
+import { selectCollectionsSchema } from "@/schemas/collection";
 
-const viewProductsRoute = createRoute({
-  path: "/products",
+const viewCollectionsRoute = createRoute({
+  path: "/collections",
   method: "get",
-  tags: TAGS.PRODUCTS,
+  tags: TAGS.COLLECTIONS,
   request: {
     query: z.object({
       id: z.string().uuid().optional().nullable(),
       includeBusiness: booleanQueryParameter,
       includeBusinessUser: booleanQueryParameter,
+      includeCollector: booleanQueryParameter,
+      includeCollectorUser: booleanQueryParameter,
+      includeProduct: booleanQueryParameter,
+      includeProductBusiness: booleanQueryParameter,
+      includeProductBusinessUser: booleanQueryParameter,
     }),
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      z.union([selectProductsSchema, z.array(selectProductsSchema)]),
-      "The product object/s."
+      z.union([selectCollectionsSchema, z.array(selectCollectionsSchema)]),
+      "The collection object/s."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
-      createMessageObjectSchema("The product was not found."),
-      "The not-found error message"
+      createMessageObjectSchema("The collection was not found."),
+      "The not-found error message."
     ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
@@ -44,6 +49,6 @@ const viewProductsRoute = createRoute({
     ),
 });
 
-export type ViewProductsRoute = typeof viewProductsRoute;
+export type ViewCollectionsRoute = typeof viewCollectionsRoute;
 
-export default viewProductsRoute;
+export default viewCollectionsRoute;

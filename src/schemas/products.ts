@@ -4,7 +4,7 @@ import { relations } from "drizzle-orm";
 import { decimal, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import businesses from "./business";
+import businesses, { selectBusinessesSchema } from "./business";
 
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
@@ -21,7 +21,9 @@ export const products = pgTable("products", {
     .notNull(),
 });
 
-export const selectProductsSchema = createSelectSchema(products);
+export const selectProductsSchema = createSelectSchema(products).extend({
+  business: selectBusinessesSchema.optional().nullable(),
+});
 export const insertProductsSchema = createInsertSchema(products)
   .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })
   .extend({

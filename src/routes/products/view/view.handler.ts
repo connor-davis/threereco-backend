@@ -28,7 +28,13 @@ const viewProductsHandler: KalimbuRoute<ViewProductsRoute> = async (
             : undefined
         ),
       with: {
-        business: query.includeBusiness,
+        business: query.includeBusiness
+          ? {
+              with: {
+                user: query.includeBusinessUser,
+              },
+            }
+          : false,
       },
     });
 
@@ -46,7 +52,13 @@ const viewProductsHandler: KalimbuRoute<ViewProductsRoute> = async (
             : undefined
         ),
       with: {
-        business: query.includeBusiness,
+        business: query.includeBusiness
+          ? {
+              with: {
+                user: query.includeBusinessUser,
+              },
+            }
+          : false,
       },
     });
 

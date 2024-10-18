@@ -4,6 +4,7 @@ import createApp from "@/lib/create-app";
 
 import authentication from "./routes/authentication/authentication.router";
 import businesses from "./routes/businesses/businesses.router";
+import collections from "./routes/collections/collections.router";
 import collectors from "./routes/collectors/collectors.router";
 import index from "./routes/index.router";
 import products from "./routes/products/products.router";
@@ -18,6 +19,7 @@ const apiRoutes = [
   businesses,
   collectors,
   products,
+  collections,
 ];
 
 configureOpenAPI(app);

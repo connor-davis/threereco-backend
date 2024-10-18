@@ -1,5 +1,8 @@
+import { z } from "@hono/zod-openapi";
+
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { decimalNumber } from "@/lib/types";
 
@@ -20,6 +23,12 @@ export const collections = pgTable("collections", {
     .defaultNow()
     .notNull(),
 });
+
+export const selectCollectionsSchema = createSelectSchema(collections);
+
+export const insertCollectionsSchema = createInsertSchema(collections)
+  .omit({ businessId: true })
+  .extend({ businessId: z.string().uuid().optional().nullable() });
 
 export const collectionBusiness = relations(collections, ({ one }) => ({
   business: one(businesses, {

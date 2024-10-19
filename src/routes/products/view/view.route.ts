@@ -18,6 +18,8 @@ const viewProductsRoute = createRoute({
       id: z.string().uuid().optional().nullable(),
       includeBusiness: booleanQueryParameter,
       includeBusinessUser: booleanQueryParameter,
+      page: z.coerce.number().default(1),
+      count: z.coerce.number().default(10),
     }),
   },
   responses: {

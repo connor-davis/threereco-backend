@@ -56,6 +56,8 @@ const viewCollectionsHandler: KalimbuRoute<ViewCollectionsRoute> = async (
             }
           : false,
       },
+      limit: query.count,
+      offset: query.count * (query.page - 1),
     });
 
     return context.json(

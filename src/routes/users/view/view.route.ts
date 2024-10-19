@@ -15,6 +15,8 @@ const viewUsersRoute = createRoute({
   request: {
     query: z.object({
       id: z.string().uuid().optional().nullable(),
+      page: z.coerce.number().default(1),
+      count: z.coerce.number().default(10),
     }),
   },
   responses: {

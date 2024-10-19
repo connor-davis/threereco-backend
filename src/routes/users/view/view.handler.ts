@@ -22,7 +22,11 @@ const viewUsersHandler: KalimbuRoute<ViewUsersRoute> = async (context) => {
 
     return context.json(user, HttpStatus.OK);
   } else {
-    const users = await database.query.users.findMany();
+    const users = await database.query.users.findMany({
+      limit: query.count,
+      offset: query.count * (query.page - 1),
+      orderBy: (users, { asc }) => asc(users.email),
+    });
 
     return context.json(users, HttpStatus.OK);
   }

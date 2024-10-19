@@ -23,6 +23,8 @@ const viewCollectionsRoute = createRoute({
       includeProduct: booleanQueryParameter,
       includeProductBusiness: booleanQueryParameter,
       includeProductBusinessUser: booleanQueryParameter,
+      page: z.coerce.number().default(1),
+      count: z.coerce.number().default(10),
     }),
   },
   responses: {

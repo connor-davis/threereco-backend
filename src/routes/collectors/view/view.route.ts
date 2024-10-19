@@ -19,6 +19,8 @@ const viewCollectorsRoute = createRoute({
         .enum(["true", "false", "1", "0"])
         .default("false")
         .transform((value) => value === "true" || value === "1"),
+      page: z.coerce.number().default(1),
+      count: z.coerce.number().default(10),
     }),
   },
   responses: {

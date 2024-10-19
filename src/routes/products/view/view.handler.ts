@@ -36,6 +36,8 @@ const viewProductsHandler: KalimbuRoute<ViewProductsRoute> = async (
             }
           : false,
       },
+      limit: query.count,
+      offset: query.count * (query.page - 1),
     });
 
     return context.json(

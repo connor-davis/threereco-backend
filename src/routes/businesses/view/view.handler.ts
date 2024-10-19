@@ -17,6 +17,8 @@ const viewBusinessesHandler: KalimbuRoute<ViewBusinessesRoute> = async (
       with: {
         user: query.includeUser,
       },
+      limit: query.count,
+      offset: query.count * (query.page - 1),
     });
 
     return context.json(

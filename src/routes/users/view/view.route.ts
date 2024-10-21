@@ -42,6 +42,8 @@ export const viewUsersRoute = createRoute({
     await authenticationMiddleware(undefined, context, next),
 });
 
+export type ViewUsersRoute = typeof viewUsersRoute;
+
 export const viewUserRoute = createRoute({
   path: "/users/{id}",
   method: "get",
@@ -68,6 +70,35 @@ export const viewUserRoute = createRoute({
     await authenticationMiddleware(undefined, context, next),
 });
 
-export type ViewUsersRoute = typeof viewUsersRoute;
-
 export type ViewUserRoute = typeof viewUserRoute;
+
+export const viewUsersByRoleRoute = createRoute({
+  path: "/users/{role}",
+  method: "get",
+  tags: TAGS.USERS,
+  request: {
+    params: z.object({
+      role: z.enum(["system_admin", "admin", "staff", "business", "collector"]),
+    }),
+  },
+  responses: {
+    [HttpStatus.OK]: jsonContent(
+      z.array(selectUsersSchema),
+      "The user object/s."
+    ),
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("The user was not found."),
+      "The not-found error message."
+    ),
+    [HttpStatus.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema(
+        "You are not authorized to access this endpoint."
+      ),
+      "The un-authorized error message."
+    ),
+  },
+  middleware: async (context, next) =>
+    await authenticationMiddleware(undefined, context, next),
+});
+
+export type ViewUsersByRoleRoute = typeof viewUsersByRoleRoute;

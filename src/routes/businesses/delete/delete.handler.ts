@@ -6,6 +6,7 @@ import { KalimbuRoute } from "@/lib/types";
 import businesses from "@/schemas/business";
 import { collections } from "@/schemas/collection";
 import { products } from "@/schemas/products";
+import users from "@/schemas/user";
 
 import { DeleteBusinessRoute } from "./delete.route";
 
@@ -29,6 +30,7 @@ const deleteBusinessHandler: KalimbuRoute<DeleteBusinessRoute> = async (
     .where(eq(collections.businessId, params.id));
   await database.delete(products).where(eq(products.businessId, params.id));
   await database.delete(businesses).where(eq(businesses.id, params.id));
+  await database.delete(users).where(eq(users.id, business.userId));
 
   return context.text("ok", HttpStatus.OK);
 };

@@ -8,13 +8,12 @@ import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 import { selectBusinessesSchema } from "@/schemas/business";
 
-const viewBusinessesRoute = createRoute({
+export const viewBusinessesRoute = createRoute({
   path: "/businesses",
   method: "get",
   tags: TAGS.BUSINESSES,
   request: {
     query: z.object({
-      id: z.string().uuid().optional().nullable(),
       includeUser: z
         .enum(["true", "false", "1", "0"])
         .default("false")
@@ -25,7 +24,7 @@ const viewBusinessesRoute = createRoute({
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      z.union([selectBusinessesSchema, z.array(selectBusinessesSchema)]),
+      z.array(selectBusinessesSchema),
       "The business object/s."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
@@ -49,4 +48,43 @@ const viewBusinessesRoute = createRoute({
 
 export type ViewBusinessesRoute = typeof viewBusinessesRoute;
 
-export default viewBusinessesRoute;
+export const viewBusinessRoute = createRoute({
+  path: "/businesses/{id}",
+  method: "get",
+  tags: TAGS.BUSINESSES,
+  request: {
+    query: z.object({
+      includeUser: z
+        .enum(["true", "false", "1", "0"])
+        .default("false")
+        .transform((value) => value === "true" || value === "1"),
+    }),
+    params: z.object({
+      id: z.string().uuid(),
+    }),
+  },
+  responses: {
+    [HttpStatus.OK]: jsonContent(
+      selectBusinessesSchema,
+      "The business object/s."
+    ),
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("The business was not found."),
+      "The not-found error message."
+    ),
+    [HttpStatus.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema(
+        "You are not authorized to access this endpoint."
+      ),
+      "The un-authorized error message."
+    ),
+  },
+  middleware: async (context, next) =>
+    await authenticationMiddleware(
+      ["system_admin", "admin", "staff", "business"],
+      context,
+      next
+    ),
+});
+
+export type ViewBusinessRoute = typeof viewBusinessRoute;

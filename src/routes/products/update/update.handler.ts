@@ -1,3 +1,5 @@
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
@@ -13,6 +15,7 @@ const updateProductHandler: KalimbuRoute<UpdateProductRoute> = async (
   const userRole = session.get("user_role") as string;
 
   const payload = context.req.valid("json");
+  const params = context.req.valid("param");
 
   const business = await database.query.businesses.findFirst({
     where: (businesses, { eq, and }) =>
@@ -20,15 +23,17 @@ const updateProductHandler: KalimbuRoute<UpdateProductRoute> = async (
   });
 
   const existingProduct = await database.query.products.findFirst({
-    where: (products, { eq, and }) =>
+    where: (products, { eq, and, not }) =>
       userRole === "business"
         ? and(
             eq(products.businessId, business!.id),
-            eq(products.name, payload.name)
+            eq(products.name, payload.name),
+            not(eq(products.id, params.id))
           )
         : and(
             eq(products.businessId, payload.businessId!),
-            eq(products.name, payload.name)
+            eq(products.name, payload.name),
+            not(eq(products.id, params.id))
           ),
   });
 
@@ -46,6 +51,7 @@ const updateProductHandler: KalimbuRoute<UpdateProductRoute> = async (
       ...payload,
       businessId: userRole === "business" ? business!.id : payload.businessId!,
     })
+    .where(eq(products.id, params.id))
     .returning();
 
   return context.json(selectProductsSchema.parse(product[0]), HttpStatus.OK);

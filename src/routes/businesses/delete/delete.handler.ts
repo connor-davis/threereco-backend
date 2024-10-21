@@ -12,10 +12,10 @@ import { DeleteBusinessRoute } from "./delete.route";
 const deleteBusinessHandler: KalimbuRoute<DeleteBusinessRoute> = async (
   context
 ) => {
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
 
   const business = await database.query.businesses.findFirst({
-    where: (businesses, { eq }) => eq(businesses.id, query.id),
+    where: (businesses, { eq }) => eq(businesses.id, params.id),
   });
 
   if (!business)
@@ -26,9 +26,9 @@ const deleteBusinessHandler: KalimbuRoute<DeleteBusinessRoute> = async (
 
   await database
     .delete(collections)
-    .where(eq(collections.businessId, query.id));
-  await database.delete(products).where(eq(products.businessId, query.id));
-  await database.delete(businesses).where(eq(businesses.id, query.id));
+    .where(eq(collections.businessId, params.id));
+  await database.delete(products).where(eq(products.businessId, params.id));
+  await database.delete(businesses).where(eq(businesses.id, params.id));
 
   return context.text("ok", HttpStatus.OK);
 };

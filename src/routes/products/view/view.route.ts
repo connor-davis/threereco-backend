@@ -9,13 +9,12 @@ import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 import { selectProductsSchema } from "@/schemas/products";
 
-const viewProductsRoute = createRoute({
+export const viewProductsRoute = createRoute({
   path: "/products",
   method: "get",
   tags: TAGS.PRODUCTS,
   request: {
     query: z.object({
-      id: z.string().uuid().optional().nullable(),
       includeBusiness: booleanQueryParameter,
       includeBusinessUser: booleanQueryParameter,
       page: z.coerce.number().default(1),
@@ -48,4 +47,41 @@ const viewProductsRoute = createRoute({
 
 export type ViewProductsRoute = typeof viewProductsRoute;
 
-export default viewProductsRoute;
+export const viewProductRoute = createRoute({
+  path: "/products/{id}",
+  method: "get",
+  tags: TAGS.PRODUCTS,
+  request: {
+    params: z.object({
+      id: z.string().uuid(),
+    }),
+    query: z.object({
+      includeBusiness: booleanQueryParameter,
+      includeBusinessUser: booleanQueryParameter,
+    }),
+  },
+  responses: {
+    [HttpStatus.OK]: jsonContent(
+      z.union([selectProductsSchema, z.array(selectProductsSchema)]),
+      "The product object/s."
+    ),
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("The product was not found."),
+      "The not-found error message"
+    ),
+    [HttpStatus.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema(
+        "You are not authorized to access this endpoint."
+      ),
+      "The un-authorized error message."
+    ),
+  },
+  middleware: async (context, next) =>
+    await authenticationMiddleware(
+      ["system_admin", "admin", "staff", "business"],
+      context,
+      next
+    ),
+});
+
+export type ViewProductRoute = typeof viewProductRoute;

@@ -11,10 +11,10 @@ import { DeleteProductRoute } from "./delete.route";
 const deleteProductHandler: KalimbuRoute<DeleteProductRoute> = async (
   context
 ) => {
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
 
   const product = await database.query.products.findFirst({
-    where: (products, { eq }) => eq(products.id, query.id),
+    where: (products, { eq }) => eq(products.id, params.id),
   });
 
   if (!product)
@@ -23,8 +23,10 @@ const deleteProductHandler: KalimbuRoute<DeleteProductRoute> = async (
       HttpStatus.NOT_FOUND
     );
 
-  await database.delete(collections).where(eq(collections.productId, query.id));
-  await database.delete(products).where(eq(products.id, query.id));
+  await database
+    .delete(collections)
+    .where(eq(collections.productId, params.id));
+  await database.delete(products).where(eq(products.id, params.id));
 
   return context.text("ok", HttpStatus.OK);
 };

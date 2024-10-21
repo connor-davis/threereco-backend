@@ -8,11 +8,11 @@ import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 
 const deleteProductRoute = createRoute({
-  path: "/products",
+  path: "/products/{id}",
   method: "delete",
   tags: TAGS.PRODUCTS,
   request: {
-    query: z.object({
+    params: z.object({
       id: z.string().uuid(),
     }),
   },

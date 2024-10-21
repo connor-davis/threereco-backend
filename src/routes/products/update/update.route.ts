@@ -9,11 +9,11 @@ import authenticationMiddleware from "@/middleware/authentication-middleware";
 import { insertProductsSchema, selectProductsSchema } from "@/schemas/products";
 
 const updateProductRoute = createRoute({
-  path: "/products",
+  path: "/products/{id}",
   method: "put",
   tags: TAGS.PRODUCTS,
   request: {
-    query: z.object({
+    params: z.object({
       id: z.string().uuid(),
     }),
     body: jsonContent(

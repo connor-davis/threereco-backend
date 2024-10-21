@@ -10,10 +10,10 @@ import { DeleteCollectionRoute } from "./delete.route";
 const deleteCollectionHandler: KalimbuRoute<DeleteCollectionRoute> = async (
   context
 ) => {
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
 
   const collection = await database.query.collections.findFirst({
-    where: (collections, { eq }) => eq(collections.id, query.id),
+    where: (collections, { eq }) => eq(collections.id, params.id),
   });
 
   if (!collection)
@@ -22,7 +22,7 @@ const deleteCollectionHandler: KalimbuRoute<DeleteCollectionRoute> = async (
       HttpStatus.NOT_FOUND
     );
 
-  await database.delete(collections).where(eq(collections.id, query.id));
+  await database.delete(collections).where(eq(collections.id, params.id));
 
   return context.text("ok", HttpStatus.OK);
 };

@@ -12,11 +12,11 @@ import {
 } from "@/schemas/collector";
 
 const updateCollectorRoute = createRoute({
-  path: "/collectors",
+  path: "/collectors/{id}",
   method: "put",
   tags: TAGS.COLLECTORS,
   request: {
-    query: z.object({
+    params: z.object({
       id: z.string().uuid(),
     }),
     body: jsonContent(

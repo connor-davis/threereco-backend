@@ -10,11 +10,11 @@ import { UpdateBusinessRoute } from "./update.route";
 const updateBusinessHandler: KalimbuRoute<UpdateBusinessRoute> = async (
   context
 ) => {
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
   const payload = context.req.valid("json");
 
   const existingBusiness = await database.query.businesses.findFirst({
-    where: (businesses, { eq }) => eq(businesses.id, query.id),
+    where: (businesses, { eq }) => eq(businesses.id, params.id),
   });
 
   const existingBusinessWithName = await database.query.businesses.findFirst({
@@ -24,7 +24,7 @@ const updateBusinessHandler: KalimbuRoute<UpdateBusinessRoute> = async (
           eq(businesses.name, payload.name),
           like(businesses.name, payload.name.toLowerCase())
         ),
-        not(eq(businesses.id, query.id))
+        not(eq(businesses.id, params.id))
       ),
   });
 
@@ -43,7 +43,7 @@ const updateBusinessHandler: KalimbuRoute<UpdateBusinessRoute> = async (
   const business = await database
     .update(businesses)
     .set(payload)
-    .where(eq(businesses.id, query.id))
+    .where(eq(businesses.id, params.id))
     .returning();
 
   return context.json(

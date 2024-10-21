@@ -12,7 +12,7 @@ const updateCollectionHandler: KalimbuRoute<UpdateCollectionRoute> = async (
   const userId = session.get("user_id") as string;
   const userRole = session.get("user_role") as string;
 
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
   const payload = context.req.valid("json");
 
   const business = await database.query.businesses.findFirst({
@@ -21,7 +21,7 @@ const updateCollectionHandler: KalimbuRoute<UpdateCollectionRoute> = async (
   });
 
   const existingCollection = await database.query.collections.findFirst({
-    where: (collections, { eq }) => eq(collections.id, query.id),
+    where: (collections, { eq }) => eq(collections.id, params.id),
   });
 
   if (!existingCollection)

@@ -8,11 +8,11 @@ import { UpdateCollectorRoute } from "./update.route";
 const updateCollectorHandler: KalimbuRoute<UpdateCollectorRoute> = async (
   context
 ) => {
-  const query = context.req.valid("query");
+  const params = context.req.valid("param");
   const payload = context.req.valid("json");
 
   const existingCollector = await database.query.collectors.findFirst({
-    where: (collectors, { eq }) => eq(collectors.id, query.id),
+    where: (collectors, { eq }) => eq(collectors.id, params.id),
   });
 
   const existingCollectorWithIdNumber =
@@ -20,7 +20,7 @@ const updateCollectorHandler: KalimbuRoute<UpdateCollectorRoute> = async (
       where: (collectors, { eq, not, and }) =>
         and(
           eq(collectors.idNumber, payload.idNumber),
-          not(eq(collectors.id, query.id))
+          not(eq(collectors.id, params.id))
         ),
     });
 
@@ -29,7 +29,7 @@ const updateCollectorHandler: KalimbuRoute<UpdateCollectorRoute> = async (
       where: (collectors, { eq, not, and }) =>
         and(
           eq(collectors.bankAccountNumber, payload.bankAccountNumber),
-          not(eq(collectors.id, query.id))
+          not(eq(collectors.id, params.id))
         ),
     });
 

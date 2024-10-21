@@ -12,11 +12,11 @@ import {
 } from "@/schemas/business";
 
 const updateBusinessRoute = createRoute({
-  path: "/businesses",
+  path: "/businesses/{id}",
   method: "put",
   tags: TAGS.BUSINESSES,
   request: {
-    query: z.object({
+    params: z.object({
       id: z.string().uuid(),
     }),
     body: jsonContent(

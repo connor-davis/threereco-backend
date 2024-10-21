@@ -18,7 +18,7 @@ const users = pgTable("users", {
     length: 255,
   }).notNull(),
   active: boolean("active").default(true).notNull(),
-  role: roles("role").default("customer").notNull(),
+  role: roles("role").default("collector").notNull(),
   mfaSecret: varchar("mfa_secret", {
     length: 255,
   }),

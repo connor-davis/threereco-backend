@@ -16,6 +16,10 @@ export const viewUsersRoute = createRoute({
     query: z.object({
       page: z.coerce.number().default(1),
       count: z.coerce.number().default(10),
+      role: z
+        .enum(["system_admin", "admin", "staff", "business", "collector"])
+        .optional()
+        .nullable(),
     }),
   },
   responses: {

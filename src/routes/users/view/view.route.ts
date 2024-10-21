@@ -73,7 +73,7 @@ export const viewUserRoute = createRoute({
 export type ViewUserRoute = typeof viewUserRoute;
 
 export const viewUsersByRoleRoute = createRoute({
-  path: "/users/{role}",
+  path: "/users/role/{role}",
   method: "get",
   tags: TAGS.USERS,
   request: {

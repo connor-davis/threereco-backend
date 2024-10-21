@@ -3,11 +3,7 @@ import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
 import { selectUsersSchema } from "@/schemas/user";
 
-import {
-  ViewUserRoute,
-  ViewUsersByRoleRoute,
-  ViewUsersRoute,
-} from "./view.route";
+import { ViewUserRoute, ViewUsersRoute } from "./view.route";
 
 export const viewUsersHandler: KalimbuRoute<ViewUsersRoute> = async (
   context
@@ -44,19 +40,4 @@ export const viewUserHandler: KalimbuRoute<ViewUserRoute> = async (context) => {
     );
 
   return context.json(selectUsersSchema.parse(user), HttpStatus.OK);
-};
-
-export const viewUsersByRoleHandler: KalimbuRoute<
-  ViewUsersByRoleRoute
-> = async (context) => {
-  const param = context.req.valid("param");
-
-  const users = await database.query.users.findMany({
-    where: (users, { eq }) => eq(users.role, param.role),
-  });
-
-  return context.json(
-    users.map((user) => selectUsersSchema.parse(user)),
-    HttpStatus.OK
-  );
 };

@@ -65,6 +65,7 @@ export const createUsersSchema = insertUsersSchema.pick({
 export const updateUsersSchema = insertUsersSchema.pick({
   email: true,
   role: true,
+  mfaEnabled: true,
 });
 
 export default users;

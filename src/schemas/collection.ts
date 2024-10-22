@@ -1,10 +1,8 @@
 import { z } from "@hono/zod-openapi";
 
 import { relations } from "drizzle-orm";
-import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-
-import { decimalNumber } from "@/lib/types";
 
 import businesses, { selectBusinessesSchema } from "./business";
 import collectors, { selectCollectorsSchema } from "./collector";
@@ -15,7 +13,7 @@ export const collections = pgTable("collections", {
   businessId: uuid("business_id").notNull(),
   collectorId: uuid("collector_id").notNull(),
   productId: uuid("product_id").notNull(),
-  weight: decimalNumber("weight").notNull(),
+  weight: text("weight").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

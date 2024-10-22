@@ -31,7 +31,11 @@ export default function createApp() {
       origin: ["http://localhost:5173", "https://3reco.vps2.lone-wolf.dev"],
     })
   );
-  app.use(csrf());
+  app.use(
+    csrf({
+      origin: ["http://localhost:5173", "https://3reco.vps2.lone-wolf.dev"],
+    })
+  );
 
   const store = new CookieStore();
 

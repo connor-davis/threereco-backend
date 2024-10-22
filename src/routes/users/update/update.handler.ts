@@ -25,7 +25,8 @@ const updateUserHandler: KalimbuRoute<UpdateUserRoute> = async (context) => {
     .update(users)
     .set({
       ...payload,
-      mfaEnabled: payload.mfaEnabled || existingUser.mfaEnabled,
+      mfaEnabled:
+        payload.mfaEnabled !== undefined && payload.mfaEnabled !== false,
       mfaSecret:
         payload.mfaEnabled !== undefined && payload.mfaEnabled === false
           ? null

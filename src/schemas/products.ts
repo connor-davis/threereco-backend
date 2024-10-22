@@ -1,13 +1,15 @@
-import { relations, sql } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { z } from "@hono/zod-openapi";
 
-import { decimalNumber } from "../utilities/postgres";
-import { businesses } from "./businesses";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import { decimalNumber } from "@/lib/types";
+
+import businesses, { selectBusinessesSchema } from "./business";
 
 export const products = pgTable("products", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   price: decimalNumber("price").notNull(),
   gwCode: text("gwCode").notNull(),
@@ -21,7 +23,16 @@ export const products = pgTable("products", {
     .notNull(),
 });
 
-export const productsBusiness = relations(products, ({ one }) => ({
+export const selectProductsSchema = createSelectSchema(products).extend({
+  business: selectBusinessesSchema.optional().nullable(),
+});
+export const insertProductsSchema = createInsertSchema(products)
+  .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })
+  .extend({
+    businessId: z.string().uuid().optional().nullable(),
+  });
+
+export const productBusiness = relations(products, ({ one }) => ({
   business: one(businesses, {
     fields: [products.businessId],
     references: [businesses.id],

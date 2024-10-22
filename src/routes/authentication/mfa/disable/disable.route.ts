@@ -9,7 +9,7 @@ import authenticationMiddleware from "@/middleware/authentication-middleware";
 
 const disableMfaRoute = createRoute({
   path: "/authentication/disable-mfa",
-  method: "put",
+  method: "delete",
   tags: TAGS.AUTHENTICATION,
   request: {
     query: z.object({

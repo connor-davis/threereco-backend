@@ -1,3 +1,5 @@
+import { sql } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
@@ -15,7 +17,7 @@ export const viewUsersHandler: KalimbuRoute<ViewUsersRoute> = async (
       and(query.role ? eq(users.role, query.role) : undefined),
     limit: query.count,
     offset: query.count * (query.page - 1),
-    orderBy: (users, { asc }) => asc(users.email),
+    orderBy: (_, { asc }) => asc(sql`lower(email)`),
   });
 
   return context.json(

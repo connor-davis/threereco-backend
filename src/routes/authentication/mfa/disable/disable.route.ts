@@ -8,7 +8,7 @@ import TAGS from "@/lib/tags";
 import authenticationMiddleware from "@/middleware/authentication-middleware";
 
 const disableMfaRoute = createRoute({
-  path: "/authentication/mfa/disable",
+  path: "/authentication/disable-mfa",
   method: "put",
   tags: TAGS.AUTHENTICATION,
   request: {

@@ -20,6 +20,10 @@ export const viewCollectorsRoute = createRoute({
         .transform((value) => value === "true" || value === "1"),
       page: z.coerce.number().default(1),
       count: z.coerce.number().default(10),
+      usePaging: z
+        .enum(["true", "false", "1", "0"])
+        .default("true")
+        .transform((value) => value === "true" || value === "1"),
     }),
   },
   responses: {
@@ -56,6 +60,10 @@ export const viewCollectorRoute = createRoute({
       includeUser: z
         .enum(["true", "false", "1", "0"])
         .default("false")
+        .transform((value) => value === "true" || value === "1"),
+      usePaging: z
+        .enum(["true", "false", "1", "0"])
+        .default("true")
         .transform((value) => value === "true" || value === "1"),
     }),
   },

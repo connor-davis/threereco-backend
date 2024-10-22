@@ -19,11 +19,15 @@ export const viewProductsRoute = createRoute({
       includeBusinessUser: booleanQueryParameter,
       page: z.coerce.number().default(1),
       count: z.coerce.number().default(10),
+      usePaging: z
+        .enum(["true", "false", "1", "0"])
+        .default("true")
+        .transform((value) => value === "true" || value === "1"),
     }),
   },
   responses: {
     [HttpStatus.OK]: jsonContent(
-      z.union([selectProductsSchema, z.array(selectProductsSchema)]),
+      z.array(selectProductsSchema),
       "The product object/s."
     ),
     [HttpStatus.NOT_FOUND]: jsonContent(
@@ -61,10 +65,7 @@ export const viewProductRoute = createRoute({
     }),
   },
   responses: {
-    [HttpStatus.OK]: jsonContent(
-      z.union([selectProductsSchema, z.array(selectProductsSchema)]),
-      "The product object/s."
-    ),
+    [HttpStatus.OK]: jsonContent(selectProductsSchema, "The product object/s."),
     [HttpStatus.NOT_FOUND]: jsonContent(
       createMessageObjectSchema("The product was not found."),
       "The not-found error message"

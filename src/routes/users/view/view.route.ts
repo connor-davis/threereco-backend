@@ -20,6 +20,10 @@ export const viewUsersRoute = createRoute({
         .enum(["system_admin", "admin", "staff", "business", "collector"])
         .optional()
         .nullable(),
+      usePaging: z
+        .enum(["true", "false", "1", "0"])
+        .default("true")
+        .transform((value) => value === "true" || value === "1"),
     }),
   },
   responses: {

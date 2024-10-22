@@ -13,6 +13,8 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
   const userId = session.get("user_id") as string;
   const userRole = session.get("user_role") as string;
 
+  console.log(userRole);
+
   const query = context.req.valid("query");
 
   const business = await database.query.businesses.findFirst({

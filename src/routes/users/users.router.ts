@@ -2,6 +2,8 @@ import createRouter from "@/lib/create-router";
 
 import createUserHandler from "./create/create.handler";
 import createUserRoute from "./create/create.route";
+import deleteAccountHandler from "./delete-account/deleteAccount.handler";
+import deleteAccountRoute from "./delete-account/deleteAccount.route";
 import deleteUserHandler from "./delete/delete.handler";
 import deleteUserRoute from "./delete/delete.route";
 import usersPagingHandler from "./paging/paging.handler";
@@ -17,6 +19,7 @@ const users = createRouter()
   .openapi(viewUserRoute, viewUserHandler)
   .openapi(createUserRoute, createUserHandler)
   .openapi(updateUserRoute, updateUserHandler)
-  .openapi(deleteUserRoute, deleteUserHandler);
+  .openapi(deleteUserRoute, deleteUserHandler)
+  .openapi(deleteAccountRoute, deleteAccountHandler);
 
 export default users;

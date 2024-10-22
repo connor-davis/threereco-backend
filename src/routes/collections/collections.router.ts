@@ -18,11 +18,11 @@ import { viewCollectionRoute, viewCollectionsRoute } from "./view/view.route";
 
 const collections = createRouter()
   .openapi(collectionsPagingRoute, collectionsPagingHandler)
+  .openapi(exportCollectionsRoute, exportCollectionsHandler)
   .openapi(viewCollectionsRoute, viewCollectionsHandler)
   .openapi(viewCollectionRoute, viewCollectionHandler)
   .openapi(createCollectionRoute, createCollectionHandler)
   .openapi(deleteCollectionRoute, deleteCollectionHandler)
-  .openapi(updateCollectionRoute, updateCollectionHandler)
-  .openapi(exportCollectionsRoute, exportCollectionsHandler);
+  .openapi(updateCollectionRoute, updateCollectionHandler);
 
 export default collections;

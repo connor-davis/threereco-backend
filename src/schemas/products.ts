@@ -1,15 +1,17 @@
 import { z } from "@hono/zod-openapi";
 
 import { relations } from "drizzle-orm";
-import { decimal, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import { decimalNumber } from "@/lib/types";
 
 import businesses, { selectBusinessesSchema } from "./business";
 
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
-  price: decimal("price").notNull(),
+  price: decimalNumber("price").notNull(),
   gwCode: text("gwCode").notNull(),
   carbonFactor: text("carbonFactor").notNull(),
   businessId: uuid("business_id").notNull(),

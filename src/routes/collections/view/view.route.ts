@@ -24,6 +24,10 @@ export const viewCollectionsRoute = createRoute({
       includeProductBusinessUser: booleanQueryParameter,
       page: z.coerce.number().default(1),
       count: z.coerce.number().default(10),
+      usePaging: z
+        .enum(["true", "false", "1", "0"])
+        .default("true")
+        .transform((value) => value === "true" || value === "1"),
     }),
   },
   responses: {

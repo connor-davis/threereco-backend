@@ -6,6 +6,8 @@ import loginRoute from "@/routes/authentication/login/login.route";
 import checkHandler from "./check/check.handler";
 import logoutHandler from "./logout/logout.handler";
 import logoutRoute from "./logout/logout.route";
+import disableMfaHandler from "./mfa/disable/disable.handler";
+import disableMfaRoute from "./mfa/disable/disable.route";
 import enableHandler from "./mfa/enable/enable.handler";
 import enableRoute from "./mfa/enable/enable.route";
 import verifyHandler from "./mfa/verify/verify.handler";
@@ -22,6 +24,7 @@ const authentication = createRouter()
   .openapi(checkRoute, checkHandler)
   .openapi(enableRoute, enableHandler)
   .openapi(verifyRoute, verifyHandler)
-  .openapi(passwordResetRoute, passwordResetHandler);
+  .openapi(passwordResetRoute, passwordResetHandler)
+  .openapi(disableMfaRoute, disableMfaHandler);
 
 export default authentication;

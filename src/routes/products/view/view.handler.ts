@@ -23,7 +23,9 @@ export const viewProductsHandler: KalimbuRoute<ViewProductsRoute> = async (
     where: (products, { and, eq }) =>
       and(
         userRole === "business"
-          ? eq(products.businessId, business!.id) // If the user is a business user, only return the users products.
+          ? business
+            ? eq(products.businessId, business.id) // If the user is a business user, only return the users products.
+            : undefined
           : undefined
       ),
     with: {

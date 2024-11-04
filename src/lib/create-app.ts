@@ -28,12 +28,12 @@ export default function createApp() {
   app.use(secureHeaders());
   app.use(
     cors({
-      origin: "*",
+      origin: ["http://localhost:5173", "https://3reco.vps2.lone-wolf.dev"],
     })
   );
   app.use(
     csrf({
-      origin: "*",
+      origin: ["http://localhost:5173", "https://3reco.vps2.lone-wolf.dev"],
     })
   );
 

@@ -23,7 +23,9 @@ export const viewCollectionsHandler: KalimbuRoute<
     where: (collections, { eq, and }) =>
       and(
         userRole === "business"
-          ? eq(collections.businessId, business!.id)
+          ? business
+            ? eq(collections.businessId, business.id)
+            : undefined
           : undefined
       ),
     with: {

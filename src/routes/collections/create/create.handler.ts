@@ -19,7 +19,7 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
       and(userRole === "business" ? eq(businesses.userId, userId) : undefined),
   });
 
-  const collection = await database
+  const [collection] = await database
     .insert(collections)
     .values({
       ...payload,
@@ -33,10 +33,7 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
     })
     .returning();
 
-  return context.json(
-    selectCollectionsSchema.parse(collection[0]),
-    HttpStatus.OK
-  );
+  return context.json(selectCollectionsSchema.parse(collection), HttpStatus.OK);
 };
 
 export default createCollectionHandler;

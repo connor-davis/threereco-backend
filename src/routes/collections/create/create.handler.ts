@@ -23,6 +23,7 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
     .insert(collections)
     .values({
       ...payload,
+      createdAt: payload.createdAt ?? new Date(),
       businessId:
         userRole === "business"
           ? business

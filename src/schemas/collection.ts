@@ -30,7 +30,10 @@ export const selectCollectionsSchema = createSelectSchema(collections).extend({
 
 export const insertCollectionsSchema = createInsertSchema(collections)
   .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })
-  .extend({ businessId: z.string().uuid().optional().nullable() });
+  .extend({
+    businessId: z.string().uuid().optional().nullable(),
+    createdAt: z.coerce.date().optional().nullable(),
+  });
 
 export const collectionBusiness = relations(collections, ({ one }) => ({
   business: one(businesses, {

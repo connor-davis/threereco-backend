@@ -36,6 +36,7 @@ const updateCollectionHandler: KalimbuRoute<UpdateCollectionRoute> = async (
     .update(collections)
     .set({
       ...payload,
+      createdAt: payload.createdAt ?? new Date(),
       businessId: userRole === "business" ? business!.id : payload.businessId!,
     })
     .where(eq(collections.id, params.id))

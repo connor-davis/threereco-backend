@@ -26,8 +26,16 @@ export default function createApp() {
   app.use(pinoLogger());
 
   app.use(secureHeaders());
-  app.use(cors());
-  app.use(csrf());
+  app.use(
+    cors({
+      origin: "*",
+    })
+  );
+  app.use(
+    csrf({
+      origin: "*",
+    })
+  );
 
   const store = new CookieStore();
 
@@ -38,7 +46,7 @@ export default function createApp() {
       encryptionKey: env.SESSION_SECRET,
       expireAfterSeconds: 60 * 30, // 30 Minutes
       cookieOptions: {
-        sameSite: "None",
+        sameSite: "Lax",
         path: "/",
         httpOnly: true,
         secure: env.NODE_ENV === "production" ? true : false,

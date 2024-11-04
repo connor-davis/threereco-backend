@@ -38,7 +38,7 @@ export default function createApp() {
       encryptionKey: env.SESSION_SECRET,
       expireAfterSeconds: 60 * 30, // 30 Minutes
       cookieOptions: {
-        sameSite: "Lax",
+        sameSite: "None",
         path: "/",
         httpOnly: true,
         secure: env.NODE_ENV === "production" ? true : false,

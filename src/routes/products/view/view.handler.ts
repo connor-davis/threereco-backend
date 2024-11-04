@@ -16,7 +16,7 @@ export const viewProductsHandler: KalimbuRoute<ViewProductsRoute> = async (
 
   const business = await database.query.businesses.findFirst({
     where: (businesses, { and, eq }) =>
-      and(userRole === "business" ? eq(businesses.id, userId) : undefined),
+      and(userRole === "business" ? eq(businesses.userId, userId) : undefined),
   });
 
   const products = await database.query.products.findMany({

@@ -23,7 +23,12 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
     .insert(collections)
     .values({
       ...payload,
-      businessId: userRole === "business" ? business!.id : payload.businessId!,
+      businessId:
+        userRole === "business"
+          ? business
+            ? business.id
+            : payload.businessId!
+          : payload.businessId!,
     })
     .returning();
 

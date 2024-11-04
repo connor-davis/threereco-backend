@@ -55,8 +55,8 @@ export const viewCollectionsHandler: KalimbuRoute<
           }
         : false,
     },
-    limit: query.count,
-    offset: query.count * (query.page - 1),
+    limit: query.usePaging ? query.count : undefined,
+    offset: query.usePaging ? query.count * (query.page - 1) : undefined,
   });
 
   return context.json(

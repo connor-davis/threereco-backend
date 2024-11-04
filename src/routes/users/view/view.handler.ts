@@ -15,8 +15,8 @@ export const viewUsersHandler: KalimbuRoute<ViewUsersRoute> = async (
   const users = await database.query.users.findMany({
     where: (users, { eq, and }) =>
       and(query.role ? eq(users.role, query.role) : undefined),
-    limit: query.count,
-    offset: query.count * (query.page - 1),
+    limit: query.usePaging ? query.count : undefined,
+    offset: query.usePaging ? query.count * (query.page - 1) : undefined,
     orderBy: (_, { asc }) => asc(sql`lower(email)`),
   });
 

@@ -1,3 +1,5 @@
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
@@ -36,6 +38,7 @@ const updateCollectionHandler: KalimbuRoute<UpdateCollectionRoute> = async (
       ...payload,
       businessId: userRole === "business" ? business!.id : payload.businessId!,
     })
+    .where(eq(collections.id, params.id))
     .returning();
 
   return context.json(

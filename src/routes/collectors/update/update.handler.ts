@@ -1,3 +1,5 @@
+import { eq } from "drizzle-orm";
+
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
@@ -53,7 +55,11 @@ const updateCollectorHandler: KalimbuRoute<UpdateCollectorRoute> = async (
       HttpStatus.CONFLICT
     );
 
-  const collector = await database.update(collectors).set(payload).returning();
+  const collector = await database
+    .update(collectors)
+    .set(payload)
+    .where(eq(collectors.id, params.id))
+    .returning();
 
   return context.json(
     selectCollectorsSchema.parse(collector[0]),

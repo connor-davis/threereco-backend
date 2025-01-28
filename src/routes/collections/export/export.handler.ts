@@ -39,13 +39,17 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
   endDate.setMilliseconds(999);
 
   const ascCollections = await database.query.collections.findMany({
-    where: and(
+    where:
       userRole === "business"
-        ? eq(collections.businessId, business!.id)
-        : undefined,
-      lte(collections.createdAt, endDate),
-      gt(collections.createdAt, startDate)
-    ),
+        ? and(
+            eq(collections.businessId, business!.id),
+            lte(collections.createdAt, endDate),
+            gt(collections.createdAt, startDate)
+          )
+        : and(
+            lte(collections.createdAt, endDate),
+            gt(collections.createdAt, startDate)
+          ),
     orderBy: asc(collections.createdAt),
     with: {
       business: {

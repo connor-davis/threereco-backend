@@ -24,6 +24,13 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
       and(userRole === "business" ? eq(businesses.userId, userId) : undefined),
   });
 
+  if (!business && userRole === "business") {
+    return context.json(
+      { message: "Business not found." },
+      HttpStatus.NOT_FOUND
+    );
+  }
+
   const startDate = query.startDate;
 
   startDate.setHours(0);

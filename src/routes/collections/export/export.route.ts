@@ -27,6 +27,10 @@ const exportCollectionsRoute = createRoute({
       },
       description: "The csv response text.",
     },
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Business not found."),
+      "The not-found error message."
+    ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
         "You are not authorized to access this endpoint."

@@ -1,8 +1,10 @@
 import { toCsv } from "@iwsio/json-csv-node";
+import { and, asc, eq, gt, lte } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
+import { collections } from "@/schemas/collection";
 
 import { ExportCollectionsRoute } from "./export.route";
 
@@ -36,16 +38,15 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
   endDate.setSeconds(59);
   endDate.setMilliseconds(999);
 
-  const collections = await database.query.collections.findMany({
-    where: (collections, { eq, and, gte, lte }) =>
-      and(
-        userRole === "business"
-          ? eq(collections.businessId, business!.id)
-          : undefined,
-        lte(collections.createdAt, query.endDate),
-        gte(collections.createdAt, query.startDate)
-      ),
-    orderBy: (collections, { asc }) => asc(collections.createdAt),
+  const ascCollections = await database.query.collections.findMany({
+    where: and(
+      userRole === "business"
+        ? eq(collections.businessId, business!.id)
+        : undefined,
+      lte(collections.createdAt, endDate),
+      gt(collections.createdAt, startDate)
+    ),
+    orderBy: asc(collections.createdAt),
     with: {
       business: {
         with: {
@@ -69,7 +70,7 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
     },
   });
 
-  const csvTest = await toCsv(collections, {
+  const csvTest = await toCsv(ascCollections, {
     fields: [
       {
         name: "business.name",

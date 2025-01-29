@@ -5,11 +5,11 @@ import { readFile, readdir } from "fs/promises";
 import path from "path";
 
 import database from "@/lib/database";
-import businesses from "@/schemas/business";
+import { businesses } from "@/schemas/business";
 import { collections } from "@/schemas/collection";
-import collectors from "@/schemas/collector";
+import { collectors } from "@/schemas/collector";
 import { products } from "@/schemas/products";
-import users from "@/schemas/user";
+import { users } from "@/schemas/user";
 
 const importDir = path.join(process.cwd(), "import");
 const importFiles = await readdir(importDir);

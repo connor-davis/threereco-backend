@@ -137,7 +137,7 @@ for (const importFile of importFiles) {
       "Africa/Johannesburg"
     );
 
-    console.log(createdAt, row[26]);
+    console.log(createdAt, row[26], new Date(row[26]).toISOString());
 
     let collection = await database.query.collections.findFirst({
       where: (collections, { eq, and }) =>

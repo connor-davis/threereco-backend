@@ -1,6 +1,4 @@
 import { genSalt, hash } from "bcrypt";
-import { parse } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
 import { readFile, readdir } from "fs/promises";
 import path from "path";
 
@@ -128,16 +126,7 @@ for (const importFile of importFiles) {
     }
 
     const weight = Number(row[25]).toString();
-    const createdAt = toZonedTime(
-      parse(
-        row[26].replace(/(\d+)(st|nd|rd|th)/, "$1"),
-        "MMMM dd, yyyy",
-        new Date()
-      ),
-      "Africa/Johannesburg"
-    );
-
-    console.log(createdAt, row[26], new Date(row[26]).toISOString());
+    const createdAt = new Date(row[26]);
 
     let collection = await database.query.collections.findFirst({
       where: (collections, { eq, and }) =>

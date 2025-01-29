@@ -3,7 +3,7 @@ import { genSalt, hash } from "bcrypt";
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
-import users, { selectUsersSchema } from "@/schemas/user";
+import { selectUsersSchema, users } from "@/schemas/user";
 
 import { CreateUserRoute } from "./create.route";
 

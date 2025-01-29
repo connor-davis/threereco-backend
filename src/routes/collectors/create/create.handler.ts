@@ -1,7 +1,7 @@
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
-import collectors, { selectCollectorsSchema } from "@/schemas/collector";
+import { collectors, selectCollectorsSchema } from "@/schemas/collector";
 
 import { CreateCollectorRoute } from "./create.route";
 

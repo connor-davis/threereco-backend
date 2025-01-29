@@ -3,10 +3,10 @@ import { eq } from "drizzle-orm";
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
-import businesses from "@/schemas/business";
+import { businesses } from "@/schemas/business";
 import { collections } from "@/schemas/collection";
 import { products } from "@/schemas/products";
-import users from "@/schemas/user";
+import { users } from "@/schemas/user";
 
 import { DeleteBusinessRoute } from "./delete.route";
 

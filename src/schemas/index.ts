@@ -20,7 +20,7 @@ import {
   transactionCollectorSeller,
   transactions,
 } from "./transaction";
-import users from "./user";
+import { users } from "./user";
 
 export default {
   users,

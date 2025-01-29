@@ -9,7 +9,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import roles from "./roles";
 
-const users = pgTable("users", {
+export const users = pgTable("users", {
   id: uuid().defaultRandom().primaryKey().notNull(),
   email: varchar({
     length: 255,
@@ -67,5 +67,3 @@ export const updateUsersSchema = insertUsersSchema.pick({
   role: true,
   mfaEnabled: true,
 });
-
-export default users;

@@ -4,8 +4,8 @@ import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
 import { collections } from "@/schemas/collection";
-import collectors from "@/schemas/collector";
-import users from "@/schemas/user";
+import { collectors } from "@/schemas/collector";
+import { users } from "@/schemas/user";
 
 import { DeleteCollectorRoute } from "./delete.route";
 

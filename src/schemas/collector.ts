@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import users, { selectUsersSchema } from "./user";
+import { selectUsersSchema, users } from "./user";
 
 export const collectors = pgTable("collectors", {
   id: uuid().defaultRandom().primaryKey().notNull(),

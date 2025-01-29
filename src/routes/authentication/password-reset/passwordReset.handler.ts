@@ -6,7 +6,7 @@ import { TOTPController } from "oslo/otp";
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
-import users from "@/schemas/user";
+import { users } from "@/schemas/user";
 
 import { PasswordResetRoute } from "./passwordReset.route";
 

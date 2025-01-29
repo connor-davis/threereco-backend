@@ -3,7 +3,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import businessTypes from "./businessTypes";
-import users, { selectUsersSchema } from "./user";
+import { selectUsersSchema, users } from "./user";
 
 export const businesses = pgTable("businesses", {
   id: uuid().defaultRandom().primaryKey().notNull(),

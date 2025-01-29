@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
-import users from "@/schemas/user";
+import { users } from "@/schemas/user";
 
 import { DeleteUserRoute } from "./delete.route";
 

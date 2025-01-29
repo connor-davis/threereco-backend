@@ -4,20 +4,26 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import businesses, { selectBusinessesSchema } from "./business";
-import collectors, { selectCollectorsSchema } from "./collector";
+import { businesses, selectBusinessesSchema } from "./business";
+import { collectors, selectCollectorsSchema } from "./collector";
 import { products, selectProductsSchema } from "./products";
 
 export const collections = pgTable("collections", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  businessId: uuid("business_id").notNull(),
-  collectorId: uuid("collector_id").notNull(),
-  productId: uuid("product_id").notNull(),
-  weight: text("weight").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  businessId: uuid()
+    .notNull()
+    .references(() => businesses.id, { onDelete: "cascade" }),
+  collectorId: uuid()
+    .notNull()
+    .references(() => collectors.id, { onDelete: "cascade" }),
+  productId: uuid()
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  weight: text().notNull(),
+  createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+  updatedAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
 });

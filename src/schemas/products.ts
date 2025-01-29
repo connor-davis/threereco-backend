@@ -4,19 +4,21 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import businesses, { selectBusinessesSchema } from "./business";
+import { businesses, selectBusinessesSchema } from "./business";
 
 export const products = pgTable("products", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  name: text("name").notNull(),
-  price: text("price").notNull(),
-  gwCode: text("gwCode").notNull(),
-  carbonFactor: text("carbonFactor").notNull(),
-  businessId: uuid("business_id").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  name: text().notNull(),
+  price: text().notNull(),
+  gwCode: text().notNull(),
+  carbonFactor: text().notNull(),
+  businessId: uuid()
+    .notNull()
+    .references(() => businesses.id, { onDelete: "cascade" }),
+  createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+  updatedAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
 });
@@ -24,6 +26,7 @@ export const products = pgTable("products", {
 export const selectProductsSchema = createSelectSchema(products).extend({
   business: selectBusinessesSchema.optional().nullable(),
 });
+
 export const insertProductsSchema = createInsertSchema(products)
   .omit({ businessId: true, id: true, createdAt: true, updatedAt: true })
   .extend({

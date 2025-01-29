@@ -1,4 +1,4 @@
-import businesses, { businessUser, userBusinesses } from "./business";
+import { businessUser, businesses, userBusinesses } from "./business";
 import businessTypes from "./businessTypes";
 import {
   businessCollections,
@@ -9,13 +9,15 @@ import {
   collectorCollections,
   productCollections,
 } from "./collection";
-import collectors, { collectorUser, userCollectors } from "./collector";
+import { collectorUser, collectors, userCollectors } from "./collector";
 import { businessProducts, productBusiness, products } from "./products";
 import roles from "./roles";
 import {
   businessTransactions,
-  transactionBuyer,
-  transactionSeller,
+  transactionBusinessBuyer,
+  transactionBusinessSeller,
+  transactionCollectorBuyer,
+  transactionCollectorSeller,
   transactions,
 } from "./transaction";
 import users from "./user";
@@ -41,7 +43,9 @@ export default {
   collectorCollections,
   productCollections,
   transactions,
-  transactionBuyer,
-  transactionSeller,
+  transactionBusinessBuyer,
+  transactionBusinessSeller,
+  transactionCollectorBuyer,
+  transactionCollectorSeller,
   businessTransactions,
 };

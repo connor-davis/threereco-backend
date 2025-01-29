@@ -5,21 +5,23 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import businessTypes from "./businessTypes";
 import users, { selectUsersSchema } from "./user";
 
-const businesses = pgTable("businesses", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  name: text("name").unique().notNull(),
-  type: businessTypes("type").default("Recycler").notNull(),
-  description: text("description").notNull(),
-  phoneNumber: text("phone_number").notNull(),
-  address: text("address").notNull(),
-  city: text("city").notNull(),
-  province: text("province").notNull(),
-  zipCode: text("zip_code").notNull(),
-  userId: uuid("user_id").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+export const businesses = pgTable("businesses", {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  name: text().unique().notNull(),
+  type: businessTypes().default("Recycler").notNull(),
+  description: text().notNull(),
+  phoneNumber: text().notNull(),
+  address: text().notNull(),
+  city: text().notNull(),
+  province: text().notNull(),
+  zipCode: text().notNull(),
+  userId: uuid()
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+  updatedAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
 });
@@ -44,5 +46,3 @@ export const businessUser = relations(businesses, ({ one }) => ({
 export const userBusinesses = relations(users, ({ many }) => ({
   businesses: many(businesses),
 }));
-
-export default businesses;

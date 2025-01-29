@@ -10,28 +10,28 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import roles from "./roles";
 
 const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  email: varchar("email", {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  email: varchar({
     length: 255,
   }).notNull(),
-  password: varchar("password", {
+  password: varchar({
     length: 255,
   }).notNull(),
-  active: boolean("active").default(true).notNull(),
-  role: roles("role").default("collector").notNull(),
-  mfaSecret: varchar("mfa_secret", {
+  active: boolean().default(true).notNull(),
+  role: roles().default("collector").notNull(),
+  mfaSecret: varchar({
     length: 255,
   }),
-  mfaEnabled: boolean("mfa_enabled").default(false).notNull(),
-  mfaVerified: boolean("mfa_verified").default(false).notNull(),
-  createdAt: timestamp("created_at", {
+  mfaEnabled: boolean().default(false).notNull(),
+  mfaVerified: boolean().default(false).notNull(),
+  createdAt: timestamp({
     mode: "string",
     precision: 6,
     withTimezone: true,
   })
     .notNull()
     .defaultNow(),
-  updatedAt: timestamp("updated_at", {
+  updatedAt: timestamp({
     mode: "string",
     precision: 6,
     withTimezone: true,

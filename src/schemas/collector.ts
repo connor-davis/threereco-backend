@@ -4,24 +4,26 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import users, { selectUsersSchema } from "./user";
 
-const collectors = pgTable("collectors", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  idNumber: text("id_number").notNull(),
-  phoneNumber: text("phone_number").notNull(),
-  address: text("address").notNull(),
-  city: text("city").notNull(),
-  province: text("province").notNull(),
-  zipCode: text("zip_code").notNull(),
-  bankName: text("bank_name").notNull(),
-  bankAccountHolder: text("bank_account_holder").notNull(),
-  bankAccountNumber: text("bank_account_number").notNull(),
-  userId: uuid("user_id").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 })
+export const collectors = pgTable("collectors", {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  firstName: text().notNull(),
+  lastName: text().notNull(),
+  idNumber: text().notNull(),
+  phoneNumber: text().notNull(),
+  address: text().notNull(),
+  city: text().notNull(),
+  province: text().notNull(),
+  zipCode: text().notNull(),
+  bankName: text().notNull(),
+  bankAccountHolder: text().notNull(),
+  bankAccountNumber: text().notNull(),
+  userId: uuid()
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 })
+  updatedAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),
 });
@@ -46,5 +48,3 @@ export const collectorUser = relations(collectors, ({ one }) => ({
 export const userCollectors = relations(users, ({ many }) => ({
   collectors: many(collectors),
 }));
-
-export default collectors;

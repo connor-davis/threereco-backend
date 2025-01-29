@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+
 import { apiReference } from "@scalar/hono-api-reference";
 
 import { KalimbuConfig } from "@/lib/types";
@@ -10,8 +11,7 @@ export default function configureScalar(app: OpenAPIHono<KalimbuConfig>) {
       spec: {
         url: "/api/api-spec",
       },
-      theme: "mars",
-      layout: "modern",
+      layout: "classic",
       defaultHttpClient: {
         targetKey: "node",
         clientKey: "fetch",

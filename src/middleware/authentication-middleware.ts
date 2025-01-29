@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
-import users from "@/schemas/user";
+import { users } from "@/schemas/user";
 
 const authenticationMiddleware = async (
   requiredRoles: string[] | undefined,

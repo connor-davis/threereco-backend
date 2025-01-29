@@ -2,6 +2,7 @@ import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
 import { collections, selectCollectionsSchema } from "@/schemas/collection";
+import { transactions } from "@/schemas/transaction";
 
 import { CreateCollectionRoute } from "./create.route";
 
@@ -32,6 +33,18 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
           : payload.businessId!,
     })
     .returning();
+
+  await database.insert(transactions).values({
+    buyerId:
+      userRole === "business"
+        ? business
+          ? business.id
+          : payload.businessId!
+        : payload.businessId!,
+    sellerId: payload.collectorId,
+    productId: payload.productId,
+    weight: payload.weight,
+  });
 
   return context.json(selectCollectionsSchema.parse(collection), HttpStatus.OK);
 };

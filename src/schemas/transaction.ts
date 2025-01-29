@@ -1,7 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
-
-import { decimalNumber } from "@/lib/types";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { businesses } from "./business";
 import { collectors } from "./collector";
@@ -20,7 +18,7 @@ export const transactions = pgTable("transactions", {
   productId: uuid()
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
-  weight: decimalNumber().notNull(),
+  weight: text().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

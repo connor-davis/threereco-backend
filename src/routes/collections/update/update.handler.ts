@@ -1,9 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import database from "@/lib/database";
 import HttpStatus from "@/lib/http-status";
 import { KalimbuRoute } from "@/lib/types";
 import { collections, selectCollectionsSchema } from "@/schemas/collection";
+import { transactions } from "@/schemas/transaction";
 
 import { UpdateCollectionRoute } from "./update.route";
 
@@ -37,10 +38,36 @@ const updateCollectionHandler: KalimbuRoute<UpdateCollectionRoute> = async (
     .set({
       ...payload,
       createdAt: payload.createdAt ?? new Date(),
-      businessId: userRole === "business" ? business!.id : payload.businessId!,
+      businessId:
+        userRole === "business"
+          ? business
+            ? business.id
+            : payload.businessId!
+          : payload.businessId!,
     })
     .where(eq(collections.id, params.id))
     .returning();
+
+  await database
+    .update(transactions)
+    .set({
+      buyerId:
+        userRole === "business"
+          ? business
+            ? business.id
+            : payload.businessId!
+          : payload.businessId!,
+      sellerId: payload.collectorId ?? existingCollection.collectorId,
+      productId: payload.productId ?? existingCollection.productId,
+      weight: payload.weight ?? existingCollection.weight,
+    })
+    .where(
+      and(
+        eq(transactions.buyerId, existingCollection.businessId),
+        eq(transactions.sellerId, existingCollection.collectorId),
+        eq(transactions.productId, existingCollection.productId)
+      )
+    );
 
   return context.json(
     selectCollectionsSchema.parse(collection[0]),

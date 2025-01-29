@@ -12,9 +12,7 @@ export const products = pgTable("products", {
   price: text().notNull(),
   gwCode: text().notNull(),
   carbonFactor: text().notNull(),
-  businessId: uuid()
-    .notNull()
-    .references(() => businesses.id, { onDelete: "cascade" }),
+  businessId: uuid().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

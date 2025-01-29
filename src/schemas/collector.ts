@@ -17,9 +17,7 @@ export const collectors = pgTable("collectors", {
   bankName: text().notNull(),
   bankAccountHolder: text().notNull(),
   bankAccountNumber: text().notNull(),
-  userId: uuid()
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+  userId: uuid().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

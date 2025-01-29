@@ -15,9 +15,7 @@ export const businesses = pgTable("businesses", {
   city: text().notNull(),
   province: text().notNull(),
   zipCode: text().notNull(),
-  userId: uuid()
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+  userId: uuid().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

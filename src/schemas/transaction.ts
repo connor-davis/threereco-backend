@@ -7,14 +7,8 @@ import { products } from "./products";
 
 export const transactions = pgTable("transactions", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  buyerId: uuid()
-    .notNull()
-    .references(() => businesses.id, { onDelete: "cascade" })
-    .references(() => collectors.id, { onDelete: "cascade" }),
-  sellerId: uuid()
-    .notNull()
-    .references(() => businesses.id, { onDelete: "cascade" })
-    .references(() => collectors.id, { onDelete: "cascade" }),
+  buyerId: uuid().notNull(),
+  sellerId: uuid().notNull(),
   productId: uuid()
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),

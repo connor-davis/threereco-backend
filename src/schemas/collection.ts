@@ -10,15 +10,9 @@ import { products, selectProductsSchema } from "./products";
 
 export const collections = pgTable("collections", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  businessId: uuid()
-    .notNull()
-    .references(() => businesses.id, { onDelete: "cascade" }),
-  collectorId: uuid()
-    .notNull()
-    .references(() => collectors.id, { onDelete: "cascade" }),
-  productId: uuid()
-    .notNull()
-    .references(() => products.id, { onDelete: "cascade" }),
+  businessId: uuid().notNull(),
+  collectorId: uuid().notNull(),
+  productId: uuid().notNull(),
   weight: text().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()

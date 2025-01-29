@@ -3,15 +3,12 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { businesses } from "./business";
 import { collectors } from "./collector";
-import { products } from "./products";
 
 export const transactions = pgTable("transactions", {
   id: uuid().defaultRandom().primaryKey().notNull(),
   buyerId: uuid().notNull(),
   sellerId: uuid().notNull(),
-  productId: uuid()
-    .notNull()
-    .references(() => products.id, { onDelete: "cascade" }),
+  productId: uuid().notNull(),
   weight: text().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()

@@ -7,6 +7,7 @@ import { businesses } from "@/schemas/business";
 import { collections } from "@/schemas/collection";
 import { collectors } from "@/schemas/collector";
 import { products } from "@/schemas/products";
+import { transactions } from "@/schemas/transaction";
 import { users } from "@/schemas/user";
 
 const importDir = path.join(process.cwd(), "import");
@@ -143,6 +144,26 @@ for (const importFile of importFiles) {
       await database.insert(collections).values({
         businessId: business.id,
         collectorId: collector.id,
+        productId: product.id,
+        weight,
+        createdAt,
+      });
+    }
+
+    let transaction = await database.query.transactions.findFirst({
+      where: (transactions, { eq, and }) =>
+        and(
+          eq(transactions.buyerId, business.id),
+          eq(transactions.sellerId, collector.id),
+          eq(transactions.productId, product.id),
+          eq(transactions.weight, weight)
+        ),
+    });
+
+    if (transaction === undefined) {
+      await database.insert(transactions).values({
+        buyerId: business.id,
+        sellerId: collector.id,
         productId: product.id,
         weight,
         createdAt,

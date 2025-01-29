@@ -28,7 +28,7 @@ const loginHandler: KalimbuRoute<LoginRoute> = async (context) => {
 
   if (!passwordMatches)
     return context.json(
-      { message: "Invalid password." },
+      { message: "Invalid email or password." },
       HttpStatus.UNAUTHORIZED
     );
 

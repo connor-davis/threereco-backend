@@ -18,6 +18,7 @@ export const runMigrations = () =>
 const queryClient = postgres(env.DATABASE_URL ?? "");
 const database = drizzle(queryClient, {
   schema: schemas,
+  casing: "snake_case",
 });
 
 export default database;

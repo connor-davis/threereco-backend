@@ -108,7 +108,8 @@ for (const importFile of importFiles) {
     }
 
     let product = await database.query.products.findFirst({
-      where: (products, { eq }) => eq(products.name, row[21]),
+      where: (products, { and, eq }) =>
+        and(eq(products.name, row[21]), eq(products.businessId, business.id)),
     });
 
     if (product === undefined) {
@@ -135,6 +136,8 @@ for (const importFile of importFiles) {
       ),
       "Africa/Johannesburg"
     );
+
+    console.log(createdAt, row[26]);
 
     let collection = await database.query.collections.findFirst({
       where: (collections, { eq, and }) =>

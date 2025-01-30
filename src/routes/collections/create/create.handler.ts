@@ -20,6 +20,19 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
       and(userRole === "business" ? eq(businesses.userId, userId) : undefined),
   });
 
+  const product = await database.query.products.findFirst({
+    where: (products, { eq }) => eq(products.id, payload.productId),
+  });
+
+  if (!product) {
+    return context.json(
+      {
+        message: "Product not found",
+      },
+      HttpStatus.NOT_FOUND
+    );
+  }
+
   const [collection] = await database
     .insert(collections)
     .values({
@@ -44,6 +57,7 @@ const createCollectionHandler: KalimbuRoute<CreateCollectionRoute> = async (
     sellerId: payload.collectorId,
     productId: payload.productId,
     weight: payload.weight,
+    amount: product.price,
   });
 
   return context.json(selectCollectionsSchema.parse(collection), HttpStatus.OK);

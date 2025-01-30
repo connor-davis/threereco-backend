@@ -26,6 +26,10 @@ const createCollectionRoute = createRoute({
       selectCollectionsSchema,
       "The collection object of the new collection."
     ),
+    [HttpStatus.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Product not found."),
+      "The not-found error message."
+    ),
     [HttpStatus.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema(
         "You are not authorized to access this endpoint."

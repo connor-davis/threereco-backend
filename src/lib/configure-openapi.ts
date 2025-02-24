@@ -9,7 +9,7 @@ export default function configureOpenAPI(app: OpenAPIHono<KalimbuConfig>) {
     openapi: "3.0.0",
     info: {
       version: packageJSON.version,
-      title: "Charos API",
+      title: "3rEco API",
     },
   });
 }

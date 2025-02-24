@@ -12,6 +12,7 @@ export default function configureScalar(app: OpenAPIHono<KalimbuConfig>) {
         url: "/api/api-spec",
       },
       layout: "classic",
+      theme: "default",
       defaultHttpClient: {
         targetKey: "node",
         clientKey: "fetch",

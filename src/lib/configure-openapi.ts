@@ -11,5 +11,15 @@ export default function configureOpenAPI(app: OpenAPIHono<KalimbuConfig>) {
       version: packageJSON.version,
       title: "3rEco API",
     },
+    servers: [
+      {
+        url: "http://localhost:4000",
+        description: "Local server",
+      },
+      {
+        url: "https://3reco.vps2.lone-wolf.dev",
+        description: "Production server",
+      },
+    ],
   });
 }

@@ -10,7 +10,7 @@ export const transactions = pgTable("transactions", {
   sellerId: uuid().notNull(),
   productId: uuid().notNull(),
   weight: text().notNull(),
-  amount: text().notNull(),
+  amount: text().notNull().default("0"),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()
     .notNull(),

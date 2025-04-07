@@ -76,6 +76,11 @@ export const exportCollectorsHandler: KalimbuRoute<
         transform: (value) => `${value ?? "--"}`,
       },
       {
+        name: "trackerCode",
+        label: "Tracker Code",
+        transform: (value) => `${value ?? "--"}`,
+      },
+      {
         name: "user.email",
         label: "Email",
         transform: (value) => `${value ?? "--"}`,

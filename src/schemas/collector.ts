@@ -17,6 +17,7 @@ export const collectors = pgTable("collectors", {
   bankName: text().notNull(),
   bankAccountHolder: text().notNull(),
   bankAccountNumber: text().notNull(),
+  trackerCode: text(),
   userId: uuid().notNull(),
   createdAt: timestamp({ withTimezone: true, precision: 6 })
     .defaultNow()

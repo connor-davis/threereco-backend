@@ -184,6 +184,11 @@ const exportCollectionsHandler: KalimbuRoute<ExportCollectionsRoute> = async (
         transform: (value) => `${value ?? "--"}`,
       },
       {
+        name: "collector.trackerCode",
+        label: "Collector Tracker Code",
+        transform: (value) => `${value ?? "--"}`,
+      },
+      {
         name: "collector.user.email",
         label: "Collector Email",
         transform: (value) => `${value ?? "--"}`,
